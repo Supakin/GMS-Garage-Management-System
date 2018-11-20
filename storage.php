@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+<?php
+  require_once ('GMSdb/connect.inc.php');
+?>
+<!DOCTYPE html>
 <html>
 <head>
 <!-- Always force latest IE rendering engine -->
@@ -24,6 +27,41 @@
 
 <!--font-Thai-->
 <link href="https://fonts.googleapis.com/css?family=Athiti" rel="stylesheet">
+
+<script>
+
+function getDataFromDb()
+{
+	$.ajax({
+				url: "showProducttable.php" ,
+				type: "POST",
+				data: ''
+			})
+			.success(function(result) {
+				var obj = jQuery.parseJSON(result);
+					if(obj != '')
+					{
+						  //$("#myTable tbody tr:not(:first-child)").remove();
+						  $("#myBody").empty();
+						  $.each(obj, function(key, val) {
+									var tr = "<tr>";
+									tr = tr + "<td>" + val["PRO_ID"] + "</td>";
+									tr = tr + "<td>" + val["PRO_NAME"] + "</td>";
+									tr = tr + "<td>" + val["PRO_SELLPRICE"] + "</td>";
+									tr = tr + "<td>" + val["PRO_BUYPRICE"] + "</td>";
+									tr = tr + "<td>" + val["PRO_AMOUNT"] + "</td>";
+									tr = tr + "<td>" + val["PRO_WAMOUNT"] + "</td>";
+									tr = tr + "</tr>";
+									$('#myTable > tbody:last').append(tr);
+						  });
+					}
+
+			});
+
+}
+
+setInterval(getDataFromDb, 10000);   // 1000 = 1 second
+</script>
 </head>
 
 <body id="main">
@@ -57,30 +95,14 @@
         <tr>
           <th>รหัสสินค้า</th>
           <th>ชื่อสินค้า</th>
+          <th>ราคาซื้อ</th>
+          <th>ราคาขาย</th>
           <th>จำนวนคงเหลือ</th>
+          <th>จำนวนของเสีย</th>
           <th>คำอธิบาย</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>P00001</td>
-          <td>ล้อรถยนต์</td>
-          <td>20</td>
-          <td>รายละเอียด</td>
-        </tr>
-        <tr>
-          <td>P00002</td>
-          <td>ยางรถยนต์</td>
-          <td>25</td>
-          <td>รายละเอียด</td>
-        </tr>
-        <tr>
-          <td>P00003</td>
-          <td>กระจกหน้ารถ</td>
-          <td>5</td>
-          <td>รายละเอียด</td>
-        </tr>
-      </tbody>
+      <tbody id="myBody"></tbody>
     </table>
 </div>
 </div>
@@ -111,10 +133,6 @@
           <label for="PRO_NAME">จำนวนสินค้า :</label>
           <input type="text" class="form-control" id="PRO_NAME">
         </div>
-        <div class="form-group">
-          <label for="ORD_ID">เลขที่ออร์เดอร์ :</label>
-          <input type="text" class="form-control" id="ORD_ID">
-        </div>
       </div>
 
       <!-- Modal footer -->
@@ -127,7 +145,8 @@
 </div>
 
 <!-- addNewproduct Modal  -->
-<div class="modal fade" id="addNewproduct">
+
+<div class="modal fade" id="addNewproduct" method="post" action="addnewproduct_storage.php">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -138,42 +157,44 @@
       </div>
 
       <!-- Modal body -->
+    <form method="post" action="addnewproduct_storage.php">
       <div class="modal-body">
-        <div class="form-group">
+        <div>
           <label for="PRO_ID">รหัสสินค้า :</label>
-          <input type="text" class="form-control" id="PRO_ID">
+          <input name="id_pro" type="text" class="form-control" id="id_pro">
         </div>
-        <div class="form-group">
+        <div>
+          <label for="SEL_ID">ผู้ขาย :</label>
+          <input name="id_sel" type="text" class="form-control" id="id_sel">
+        </div>
+        <div>
           <label for="PRO_NAME">ชื่อสินค้า :</label>
-          <input type="text" class="form-control" id="PRO_NAME">
+          <input name="name_pro" type="text" class="form-control" id="name_pro">
         </div>
-        <div class="form-group">
+        <div>
           <label for="PRO_AMOUNT">จำนวนสินค้า :</label>
-          <input type="text" class="form-control" id="PRO_AMOUNT">
+          <input name="amount_pro" type="text" class="form-control" id="amount_pro">
         </div>
-        <div class="form-group">
+        <div>
           <label for="PRO_BUYPRICE">ราคาซื้อ :</label>
-          <input type="text" class="form-control" id="PRO_BUYPRICE">
+          <input name="buyprice_pro" type="text" class="form-control" id="buyprice_pro">
         </div>
-        <div class="form-group">
+        <div>
           <label for="PRO_SELLPRICE">ราคาขาย :</label>
-          <input type="text" class="form-control" id="PRO_SELLPRICE">
+          <input name="sellprice_pro" type="text" class="form-control" id="sellprice_pro">
         </div>
-        <div class="form-group">
+        <div>
           <label for="PRO_DESCRIP">คำอธิบายสินค้า :</label>
-          <textarea class="form-control" rows="5" id="PRO_DESCRIP"></textarea>
+          <textarea name="detail_pro" class="form-control" rows="3" id="detail_pro"></textarea>
         </div>
-        <div class="form-group">
-          <label for="ORD_ID">เลขที่ออร์เดอร์ :</label>
-          <input type="text" class="form-control" id="ORD_ID">
-        </div>
+
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">ยืนยัน</button>
+        <button type="submit" class="btn btn-success" >ยืนยัน</button>
       </div>
-
+    </form>
     </div>
   </div>
 </div>
