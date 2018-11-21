@@ -36,7 +36,7 @@
       <h3>พนักงานของเรา</h3>
     </div>
     <div class="col-4 justify-content-end">
-      <button type="button" class="btn btn-success" onclick='location.replace("rolecall_employee.html.php")'>เช็คชื่อ</button>
+      <button type="button" class="btn btn-success" onclick='location.replace("main_employee_rolecall.php")'>เช็คชื่อ</button>
       <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editEmployee_selectID">แก้ไขข้อมูลพนักงาน</button>
       <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addEmployee">เพิ่มพนักงาน</button>
     </div>
@@ -111,7 +111,7 @@
           <div class="form-group">
             <label for="emp_date_beginwork">วันเริ่มงาน :</label>
             <div>
-              <input class="form-group" type="date" name="emp_date_beginwork">
+              <input class="form-group" type="date" name="emp_date_beginwork" id="emp_date_beginwork">
             </div>
           </div>
           <div class="form-group">

@@ -28,19 +28,18 @@
 
 <body id="main">
   <div class= "container">
-    <div class="row justify-content-center">
-      <div class="col-11">
+    <div class="row">
+      <div class="col-9">
         <h3>ลงเวลาเข้า-เวลาออก</h3>
       </div>
-      <div class="col-1 justify-content-end">
+      <div class="col-3 justify-content-end">
+          <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#history_rolecall">ประวัติการลงเวลา</button>
           <button type="button" class="btn default" onclick='location.replace("main_employee.php")'>ปิด</button>
       </div>
     </div>
-    <div class="row">
-      <br>
-    </div>
+    <div class="row"><br></div>
     <div class="row justify-content-center">
-      <div class="col-12">
+      <div class="col-12 ">
         <table class="table table-hover">
           <div id="accordion">
             <div class="card">
@@ -53,7 +52,7 @@
               <div id="checkin" class="collapse" data-parent="#accordion">
                 <div class="card-body">
                   <div class="row form-group">
-                    <form method="post" action="checkin.rc.php">
+                    <form method="post" action="checkin_rolecall.php">
                     <div class="input-group mb-3">
                       <input type="text" name="emp_id" class="form-control" placeholder="รหัสพนักงาน">
                       <div class="input-group-append"><button class="btn btn-success" type="submit">ลงเวลาเข้า</button> </div>
@@ -72,10 +71,12 @@
               <div id="checkout" class="collapse" data-parent="#accordion">
                 <div class="card-body">
                   <div class="row form-group">
+                    <form method="post" action="checkout_rolecall.php">
                     <div class="input-group mb-3">
-                      <input type="text" class="form-control" placeholder="รหัสพนักงาน">
+                      <input type="text" name="emp_id" class="form-control" placeholder="รหัสพนักงาน">
                       <div class="input-group-append"><button class="btn btn-success" type="submit">ลงเวลาออก</button> </div>
                     </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -84,6 +85,11 @@
         </table>
       </div>
     </div>
+    <div class="row justify-content-center"><br></div>
+    <div class="row justify-content-center">
+      <small class="text-muted">*ตารางลงเวลาเข้า-ออกเป็นเวลาของวันนี้*</small>
+    </div>
+    <div class="row justify-content-center"><br></div>
     <div class="row justify-content-center">
       <div class="col-6">
         <h5>เวลาเข้า</h5>
@@ -112,13 +118,44 @@
               <th>ชื่อพนักงาน</th>
             </tr>
           </thead>
+          <?php
+            include('showCHECKOUTtable.php');
+           ?>
         </table>
       </div>
     </div>
   </div>
 
-  <!---------------------------------------------------------------------------->
+  <!---------------------------------------------------------------------->
+  <!--history_rolecall_selectDATE-->
+  <form  method="post" action="history_rolecall.php">
+    <div class="modal fade" id="history_rolecall">
+      <div class="modal-dialog">
+        <div class="modal-content">
 
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">ประวัติการลงเวลาเข้า-ออก</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="date_select">วันที่ต้องการดู :</label>
+              <input class="form-group" type="date" name="date_select" id="date_select">
+            </div>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+            <button name="save" type="submit" class="btn btn-success" id="submit" >ยืนยัน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 
 </body>
 </html>

@@ -12,7 +12,7 @@
 
   if($row['EMP_ID']!= null){
     if($sql_query){
-      include('editEmployee.html.php');
+      include('main_editemployee.php');
       $_SESSION['post']="";
     }else{
       echo "<script type='text/javascript'>alert('ไม่พบรหัสพนักงานนี้!!');window.history.go(-1);</script>" ;
