@@ -143,7 +143,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="date_select">วันที่ต้องการดู :</label>
-              <input class="form-group" type="date" name="date_select" id="date_select">
+              <input class="form-control" type="date" name="date_select" id="date_select">
             </div>
           </div>
 

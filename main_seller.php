@@ -1,3 +1,8 @@
+<?php
+  require_once('GMSdb/connect.inc.php');
+  connect();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,44 +27,75 @@
 <!--JS-myJS-->
 <script type="text/javascript" src="myJS.js"></script>
 
+<!--icon-->
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
+
 <!--font-Thai-->
 <link href="https://fonts.googleapis.com/css?family=Athiti" rel="stylesheet">
 </head>
 
-<body id="main">
+<body>
 <div class = "container" >
-  <div class="row">
+  <div class="row justify-content-center align-content-center">
+    <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('main.php')">
+      <i class='fas fa-home' style='font-size:10px;color:white'></i>
+      กลับหน้าหลัก
+    </button>
+  </div>
+  <div class="row mt-3 mb-3 align-items-center">
     <div class="col-1">
-      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+      <i class="fas fa-hands-helping" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-10">
-      <h3>คู่ค้าของเรา</h3>
+    <div class="col-9">
+      <h1>คู่ค้าของเรา</h1>
     </div>
-    <div class="col-1 justify-content-end">
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSeller">เพิ่มคู่ค้า</button>
+    <div class="col-2 justify-content-center">
+      <button type="button" class="btn btn-success btn-block shadow-sm" data-toggle="modal" data-target="#addseller">
+        <i class='fas fa-plus' style='font-size:10px;color:white'></i>
+        เพิ่มข้อมูลคู่ค้า
+      </button>
     </div>
   </div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
+  <div class="row">
+  <table class="table table-hover table-bordered" >
+    <thead class="thead-dark">
+      <tr align="center">
         <th>รหัสคู่ค้า</th>
         <th>ชื่อคู่ค้า</th>
         <th>เบอร์โทรติดต่อ</th>
+        <th>ที่อยู่</th>
+        <th>รายละเอียดเพิ่มเติม</th>
       </tr>
     </thead>
     <?php
-      include('showSELLERtable.php');
+    $sql = "SELECT * FROM SELLER ORDER BY SEL_ID";
+    $resultsql = mysql_query($sql) or die (mysql_error());
+
+    while($row = mysql_fetch_array($resultsql)) {
+    ?>
+      <tr>
+        <td align="center"> <?php  echo $row["SEL_ID"] ?> </td>
+        <td> <?php  echo $row["SEL_NAME"] ?> </td>
+        <td align="center"> <?php  echo $row["SEL_TEL"] ?> </td>
+        <td align="center"> <?php  echo $row["SEL_ADDRESS"] ?> </td>
+        <td align="center"> <?php  echo $row["SEL_DESCRIPT"] ?> </td>
+      </tr>
+    <?php
+    }
     ?>
   </table>
+</div>
 </div>
 
 
 
 
+
+
 <!---------------------------------------------------------------------------------------->
-<!--addSeller-->
-<form  method="post" action="addSeller.php">
-  <div class="modal fade" id="addSeller">
+<!--addseller-->
+<form  method="post" action="insert.data.php">
+  <div class="modal fade" id="addseller">
     <div class="modal-dialog">
       <div class="modal-content">
 
@@ -71,21 +107,31 @@
 
         <!-- Modal body -->
         <div class="modal-body">
+          <input type="hidden" name="action" value="addseller">
           <div class="form-group">
             <label for="sel_id">รหัสคู่ค้า :</label>
-            <input name="sel_id" type="text" class="form-control" id="sel_id" maxlength="6">
+            <input name="sel_id" type="text" class="form-control"  maxlength="6" readonly value
+            ="<?php
+              $sql = "SELECT SUBSTR(MAX(SEL_ID),2) FROM SELLER";
+              $sql_query = mysql_query($sql) or die(mysql_error());
+              $sel_id = (int)mysql_result($sql_query,0,0);
+              $sel_id += 1;
+              $sel_id = str_pad($sel_id, 5, "0", STR_PAD_LEFT);
+              $sel_id = "S".$sel_id;
+
+              echo $sel_id?>">
           </div>
           <div class="form-group">
             <label for="sel_name">ชื่อคู่ค้า :</label>
-            <input name="sel_name" type="text" class="form-control" id="sel_name">
+            <input name="sel_name" type="text" class="form-control" id="sel_name" required autocomplete="off">
           </div>
           <div class="form-group">
             <label for="sel_tel">เบอร์โทรติดต่อ :</label>
-            <input name="sel_tel" type="text" class="form-control" id="sel_tel">
+            <input name="sel_tel" type="text" class="form-control" id="sel_tel" required autocomplete="off">
           </div>
           <div clas="form-group">
             <label for="sel_address">ที่อยู่ :</label>
-            <textarea name="sel_address" class="form-control" rows="2" id="sel_address"></textarea>
+            <textarea name="sel_address" class="form-control" rows="2" id="sel_address" required autocomplete="off"></textarea>
           </div>
           <div clas="form-group">
             <label for="sel_descript">รายละเอียดเพิ่มเติม :</label>
@@ -102,17 +148,6 @@
     </div>
   </div>
 </form>
-
-
-
-<!--Slide menu-->
-<div id="mySidenav" class="sidenav" >
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="main.php">หน้าแรก</a>
-  <a href="main_seller.php">คู่ค้าของเรา</a>
-  <a href="main_product.php">สินค้าของเรา</a>
-  <a href="main_employee.php">พนักงานของเรา</a>
-</div>
 
 
 </body>
