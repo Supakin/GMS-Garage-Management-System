@@ -49,10 +49,10 @@
     <div class="col-8">
       <h1>คลังอะไหล่</h1>
     </div>
-    <div class="col-3 justify-content-end">
+    <div class="col-3.5 justify-content-end">
       <button type="button" class="btn btn-success  shadow-sm" onClick = "window.location.replace('main_order.php')">
         <i class='fas fa-scroll' style='font-size:10px;color:white'></i>
-        นำเข้าอะไหล่
+        การจัดการอะไหล่
       </button>
       <button type="button" class="btn btn-success  shadow-sm" data-toggle="modal" data-target="#addproduct">
         <i class='fas fa-plus' style='font-size:10px;color:white'></i>
@@ -94,7 +94,7 @@
     }
     ?>
   </table>
-</div>
+  </div>
 </div>
 
 
@@ -131,7 +131,7 @@
         <div>
           <label for="sel_id">รหัสผู้ขาย :</label>
             <select class="form-control"  id="sel_id" name="sel_id" required>
-              <option>กรุณาเลือกผู้ขาย</option>
+              <option value="">กรุณาเลือกผู้ขาย</option>
               <?php
                 $sql = "SELECT SEL_ID,SEL_NAME FROM SELLER ORDER BY SEL_ID";
                 $sql_query = mysql_query($sql) or die(mysql_error());

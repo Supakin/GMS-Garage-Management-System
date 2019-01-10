@@ -42,21 +42,35 @@
         กลับหน้านำเข้าอะไหล่
       </button>
     </div>
-    <form method="post" action="cf.getorder.php">
+    <form method="post" action="cf.getclaimorder.php">
     <div class="row mt-3 mb-3 align-items-center">
       <div class="col-1">
-        <i class="fas fa-pen-square" style='font-size:65px;color:black'></i>
+        <i class="fas fa-truck" style='font-size:65px;color:black'></i>
       </div>
       <div class="col-11">
         <?php
-        $sql = "SELECT MAX(GPO_ID) FROM GET_PRODUCT_ORDER";
+        $sql = "SELECT MAX(GPCO_ID) FROM GET_PRODUCT_CLAIM_ORDER";
         $sql_query = mysql_query($sql);
-        $gpo_id = (int)mysql_result($sql_query,0,0);
-        $gpo_id += 1;
-        $gpo_id = str_pad($gpo_id, 10, "0", STR_PAD_LEFT);
+        $gpco_id = (int)mysql_result($sql_query,0,0);
+        $gpco_id += 1;
+        $gpco_id = str_pad($gpco_id, 10, "0", STR_PAD_LEFT);
         ?>
-        <h3>รหัสการรับ : <?php echo $gpo_id ?></h3>
-        <input type="hidden" name="gpo_id"  value="<?php echo $gpo_id?>">
+        <h3>รหัสการรับเคลม : <?php echo $gpco_id ?></h3>
+        <input type="hidden" name="gpco_id"  value="<?php echo $gpco_id?>">
+      </div>
+    </div>
+    <?php
+      $sql = "SELECT * FROM (ORDERS NATURAL JOIN CLAIMSLIP_ORDER) NATURAL JOIN SELLER WHERE CLO_ID = '".$_POST['clo_id']."'";
+      $sql_query = mysql_query($sql) or die(mysql_error());
+      $result = mysql_fetch_array($sql_query);
+    ?>
+    <div class="row justify-content-end  m-1">
+      <div class="col-2 ">
+        รหัสการเคลม :
+      </div>
+      <div class="col-3">
+        <?php echo $_POST['clo_id'] ?>
+        <input type="hidden" name="clo_id"  value="<?php echo $_POST['clo_id']?>">
       </div>
     </div>
     <div class="row justify-content-end  m-1">
@@ -64,21 +78,17 @@
         รหัสใบนำเข้าอะไหล่ :
       </div>
       <div class="col-3">
-        <?php echo $_POST['ord_id'] ?>
-        <input type="hidden" name="ord_id"  value="<?php echo $_POST['ord_id']?>">
+        <?php echo $result['ORD_ID'] ?>
+        <input type="hidden" name="ord_id"  value="<?php echo  $result['ORD_ID']?>">
       </div>
     </div>
-    <?php
-      $sql2 = "SELECT SEL_ID,SEL_NAME,ORD_DATE FROM ORDERS NATURAL JOIN SELLER WHERE ORD_ID = '".$_POST['ord_id']."'";
-      $sql2_query = mysql_query($sql2) or die(mysql_error());
-      $rsql2 = mysql_fetch_array($sql2_query);
-    ?>
     <div class="row justify-content-end  m-1">
       <div class="col-2 ">
         รหัสผู้ขาย :
       </div>
       <div class="col-3">
-        <?php echo $rsql2['SEL_ID'] ?>
+        <?php echo $result['SEL_ID'] ?>
+        <input type="hidden" name="sel_id"  value="<?php echo  $result['SEL_ID']?>">
       </div>
     </div>
     <div class="row justify-content-end  m-1">
@@ -86,15 +96,26 @@
         ชื่อผู้ขาย :
       </div>
       <div class="col-3">
-        <?php echo $rsql2['SEL_NAME'] ?>
+        <?php echo $result['SEL_NAME'] ?>
+        <input type="hidden" name="sel_name"  value="<?php echo  $result['SEL_NAME']?>">
       </div>
     </div>
     <div class="row justify-content-end  m-1">
       <div class="col-2 ">
-        กำหนดวันได้รับ :
+      วันที่เคลม :
       </div>
       <div class="col-3">
-        <?php echo $rsql2['ORD_DATE'] ?>
+        <?php echo $result['CLO_DATE'] ?>
+        <input type="hidden" name="clo_date"  value="<?php echo  $result['CLO_DATE']?>">
+      </div>
+    </div>
+    <div class="row justify-content-end  m-1">
+      <div class="col-2 ">
+        กำหนดวันที่ได้รับ :
+      </div>
+      <div class="col-3">
+        <?php echo $result['CLO_GETDATE'] ?>
+        <input type="hidden" name="clo_getdate"  value="<?php echo  $result['CLO_GETDATE']?>">
       </div>
     </div>
     <div class="row justify-content-end  m-1">
@@ -112,16 +133,17 @@
         <tr  align="center">
           <th>รหัสสินค้า</th>
           <th>ชื่อสินค้า</th>
-          <th>จำนวนที่สั่ง</th>
+          <th>จำนวนที่เคลม</th>
           <th>รับแล้ว</th>
           <th>จำนวนที่กำลังรับ</th>
         </tr>
       </thead>
       <?php
-        $sql = "SELECT PRO_ID,PRO_NAME,ORDD_AMOUNT,ORDD_STATUS FROM ORDER_DETAIL NATURAL JOIN PRODUCT WHERE ORD_ID = '".$_POST['ord_id']."'";
-        $sql_query = mysql_query($sql);
+        $sql = "SELECT PRO_ID,PRO_NAME,CLAD_AMOUNT,CLAD_STATUS FROM CLAIM_ORDER_DETAIL NATURAL JOIN PRODUCT WHERE CLO_ID = '".$_POST['clo_id']."'";
+        $sql_query = mysql_query($sql) or die(mysql_error());
+
         while($row = mysql_fetch_array($sql_query)){
-          if($row['ORDD_STATUS']=='N'){
+          if($row['CLAD_STATUS']=='N'){
       ?>
           <tr>
             <td align="center">
@@ -133,28 +155,28 @@
               <input type="hidden" name="productname[]"  value="<?php echo $row['PRO_NAME']?>">
             </td>
             <td align="center">
-              <?php echo $row['ORDD_AMOUNT'] ?>
-              <input type="hidden" name="orderamount[]"  value="<?php echo $row['ORDD_AMOUNT']?>">
+              <?php echo $row['CLAD_AMOUNT'] ?>
+              <input type="hidden" name="claimamount[]"  value="<?php echo $row['CLAD_AMOUNT']?>">
             </td>
             <?php
-              $sql2 = "SELECT SUM(GPOD_GETAMOUNT) FROM GET_PRODUCT_ORDER_DETAIL NATURAL JOIN GET_PRODUCT_ORDER WHERE PRO_ID = '".$row['PRO_ID']."' AND ORD_ID = '".$_POST['ord_id']."'";
+              $sql2 = "SELECT SUM(GPCOD_GETAMOUNT) FROM GET_PRODUCT_CLAIM_ORDER_DETAIL NATURAL JOIN GET_PRODUCT_CLAIM_ORDER WHERE PRO_ID = '".$row['PRO_ID']."' AND CLO_ID = '".$_POST['clo_id']."'";
               $sql2_query =  mysql_query($sql2) or die(mysql_error());
               $row2 = mysql_fetch_array($sql2_query);
               $gotamount;
             ?>
             <td align="center">
               <?php
-                if($row2['SUM(GPOD_GETAMOUNT)']==null || $row2['SUM(GPOD_GETAMOUNT)']==0){
+                if($row2['SUM(GPCOD_GETAMOUNT)']==null || $row2['SUM(GPCOD_GETAMOUNT)']==0){
                   $gotamount = 0;
                 }else{
-                  $gotamount = $row2['SUM(GPOD_GETAMOUNT)'];
+                  $gotamount = $row2['SUM(GPCOD_GETAMOUNT)'];
                 }
                 echo $gotamount;
               ?>
               <input type="hidden" name="gotamount[]"  value="<?php echo $gotamount?>">
             </td>
             <td align="center">
-              <input type="number" name="getamount[]" class="form-control"  min="0" max="<?php echo ($row['ORDD_AMOUNT']-$row2['SUM(GPOD_GETAMOUNT)']);?>">
+              <input type="number" name="getamount[]" class="form-control"  min="0" max="<?php echo ($row['CLAD_AMOUNT']-$row2['SUM(GPCOD_GETAMOUNT)']);?>">
             </td>
           </tr>
       <?php

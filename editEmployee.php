@@ -1,10 +1,9 @@
 <?php
   require_once('GMSdb/connect.inc.php');
   connect();
-  if(isset($_POST['emp_id']) && $_POST['emp_id']!=null){
-      $sql = "SELECT * FROM EMPLOYEE WHERE EMP_ID = '".$_POST["emp_id"]."'";
-      $sql_query = mysql_query($sql);
-      $row = mysql_fetch_array($sql_query);
+  $sql = "SELECT * FROM EMPLOYEE WHERE EMP_ID = '".$_POST["emp_id"]."'";
+  $sql_query = mysql_query($sql);
+  $row = mysql_fetch_array($sql_query);
  ?>
  <!DOCTYPE html>
  <html>
@@ -104,11 +103,5 @@
  </html>
 
 <?php
-}else{
-  echo "<script type='text/javascript'>alert('กรุณาเลือกรหัสพนักงานที่ต้องการแก้ไขค่ะ');window.history.go(-1);</script>" ;
-
-
-}
-
-
+  disconnect();
  ?>

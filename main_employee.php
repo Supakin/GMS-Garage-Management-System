@@ -144,7 +144,7 @@
           <div class="form-group">
               <label for="emp_gender">เพศ :</label>
               <select class="form-control"  id="emp_gender" name="emp_gender" required >
-                  <option >กรุณาเลือกเพศ</option>
+                  <option value="">กรุณาเลือกเพศ</option>
                   <option value="M">ชาย</option>
                   <option value="F">หญิง</option>
               </select>
@@ -195,8 +195,8 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="emp_id">รหัสพนักงาน :</label>
-            <select class="form-control"  id="emp_id" name="emp_id">
-              <option>กรุณาเลือกพนักงานที่ต้องการแก้ไขข้อมูล</option>
+            <select class="form-control"  id="emp_id" name="emp_id" required>
+              <option value="">กรุณาเลือกพนักงานที่ต้องการแก้ไขข้อมูล</option>
               <?php
                 $sql = "SELECT EMP_ID,EMP_FNAME,EMP_LNAME FROM EMPLOYEE ORDER BY EMP_ID";
                 $sql_query = mysql_query($sql) or die(mysql_error());

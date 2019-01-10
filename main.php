@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,7 +105,7 @@
         </div>
 
         <div class="row  justify-content-center mt-5 mb-5">
-          <button type="button" class="btn btn-warning text-white  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_employee.php')">
+          <button type="button" class="btn btn-warning text-white  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_service.php')">
             <div class="row justify-content-center align-items-center">
               <div class="col p-1">
                 <i class="fas fa-wrench" style='font-size:80px;color:white'></i>
@@ -124,13 +125,13 @@
               </div>
             </div>
           </button>
-          <button type="button" class="btn btn-danger  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_employee.php')">
+          <button type="button" class="btn btn-danger  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_buy.php')">
             <div class="row justify-content-center align-items-center">
               <div class="col p-1">
                 <i class="fab fa-bitcoin" style='font-size:80px;color:white'></i>
               </div>
               <div class="col">
-                <h2>ขายสินค้า</h2>
+                <h2>ขายอะไหล่</h2>
               </div>
             </div>
           </button>

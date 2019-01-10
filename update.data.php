@@ -9,7 +9,12 @@
       echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
     }
 
-
+    //UPDATE data of SERVICE
+    if(isset($_POST['action']) && $_POST['action']=='editservice'){
+      $sql = "UPDATE SERVICE SET SER_NAME = '".$_POST["ser_name"]."',SER_BEGINCOST = '".$_POST["ser_begincost"]."' WHERE SER_ID = '".$_POST["ser_id"]."'";
+      $sql_query = mysql_query($sql) or die(mysql_error());
+      echo "<meta http-equiv ='refresh'content='0;URL=service.php'>";
+    }
 
   disconnect();
 ?>
