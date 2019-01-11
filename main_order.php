@@ -31,6 +31,41 @@
 
 <!--font-Thai-->
 <link href="https://fonts.googleapis.com/css?family=Athiti" rel="stylesheet">
+
+<style media="screen">
+html {overflow-y: scroll;}
+
+.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tabs li {
+    display: inline-block;
+    padding: 15px 25px;
+    background: none;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.tabs li.current {
+    background: #e9e9e9;
+}
+
+.tab-contents {
+    background: #e9e9e9;
+    padding: 20px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.current {
+    display: block;
+}
+</style>
 </head>
 
 <body>
@@ -46,7 +81,7 @@
         <i class="fas fa-scroll" style='font-size:65px;color:black'></i>
     </div>
     <div class="col-6">
-      <h3>นำเข้าอะไหล่</h3>
+      <h3>การจัดการอะไหล่</h3>
     </div>
     <div class="col-5 justify-content-end">
 
@@ -75,35 +110,21 @@
     </button>
   </div>
 
-  <div class="row m-2 justify-content-center">
-    <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#ordering">นำเข้าที่กำลังดำเนินการ</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#ordered">ประวัตินำเข้า</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#claiming">เคลมที่กำลังดำเนินการ</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#claimed">ประวัติการเคลม</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#getorder">ประวัติการรับ</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#getclaimorder">ประวัติรับเคลม</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#paymentorder">ประวัติชำระเงิน</a>
-      </li>
+  <div class="tab-example">
+    <ul class="tabs" >
+      <li class="tab-link current active" data-tab="menu1">นำเข้าที่กำลังดำเนินการ</li>
+      <li class="tab-link" data-tab="menu2">ประวัตินำเข้า</li>
+      <li class="tab-link" data-tab="menu3">เคลมที่กำลังดำเนินการ</li>
+      <li class="tab-link" data-tab="menu4">ประวัติการเคลม</li>
+      <li class="tab-link" data-tab="menu5">ประวัติการรับ</li>
+      <li class="tab-link" data-tab="menu6">ประวัติรับเคลม</li>
+      <li class="tab-link" data-tab="menu7">ประวัติชำระเงิน</li>
     </ul>
-  </div>
-  <div class="tab-content">
-    <!--ordering-->
-    <div id="ordering" class="container tab-pane active"><br>
-      <div id="accordion">
+
+    <div class="tab-contents">
+      <!--ordering-->
+      <div id="menu1" class="tab-pane current"><br>
+        <div id="accordion1">
         <?php
           $sql = "SELECT * FROM ORDERS NATURAL JOIN SELLER WHERE ORD_STATUS = 'N' ORDER BY ORD_ID ";
           $sql_query = mysql_query($sql);
@@ -113,7 +134,7 @@
             <div class="card-header bg-transparent">
               <div class="row">
                 <div class="col-4">
-                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['ORD_ID'];?>">
+                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['ORD_ID']."ordering";?>">
                     <center><?php echo "<b>รหัสนำเข้า : ".$row['ORD_ID']."</b>";?></center>
                   </a>
                 </div>
@@ -135,7 +156,7 @@
               </div>
             </div>
 
-            <div id="<?php echo "show".$row['ORD_ID']; ?>" class="collapse" data-parent="#accordion">
+            <div id="<?php echo "show".$row['ORD_ID']."ordering"; ?>" class="collapse" data-parent="#accordion1">
               <div class="card-body">
                 <!--line 1-->
                 <div class="row justify-content-start">
@@ -295,16 +316,16 @@
             </div>
           </div>
 
-        <?php
-          }
-        ?>
+          <?php
+            }
+          ?>
 
+        </div>
       </div>
-    </div>
 
-    <!--ordered-->
-    <div id="ordered" class="container tab-pane fade"><br>
-      <div id="accordion">
+      <!--ordered-->
+      <div id="menu2" class="tab-pane"><br>
+        <div id="accordion2">
         <?php
           $sql = "SELECT * FROM ORDERS NATURAL JOIN SELLER WHERE ORD_STATUS = 'Y' ORDER BY ORD_ID ";
           $sql_query = mysql_query($sql);
@@ -314,7 +335,7 @@
             <div class="card-header bg-transparent">
               <div class="row">
                 <div class="col-4">
-                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['ORD_ID'];?>">
+                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['ORD_ID']."ordered";?>">
                     <center><?php echo "<b>รหัสนำเข้า : ".$row['ORD_ID']."</b>";?></center>
                   </a>
                 </div>
@@ -336,7 +357,7 @@
               </div>
             </div>
 
-            <div id="<?php echo "show".$row['ORD_ID']; ?>" class="collapse" data-parent="#accordion">
+            <div id="<?php echo "show".$row['ORD_ID']."ordered"; ?>" class="collapse" data-parent="#accordion2">
               <div class="card-body">
                 <!--line 1-->
                 <div class="row justify-content-start">
@@ -496,16 +517,15 @@
             </div>
           </div>
 
-        <?php
-          }
-        ?>
-
+          <?php
+            }
+          ?>
+        </div>
       </div>
-    </div>
 
-    <!--claiming-->
-    <div id="claiming" class="container tab-pane fade"><br>
-      <div id="accordion">
+      <!--claiming-->
+      <div id="menu3" class="tab-pane"><br>
+        <div id="accordion3">
         <?php
           $sql = "SELECT * FROM (CLAIMSLIP_ORDER NATURAL JOIN ORDERS) NATURAL JOIN SELLER  WHERE CLO_STATUS = 'N' ORDER BY CLO_ID ";
           $sql_query = mysql_query($sql);
@@ -515,7 +535,7 @@
             <div class="card-header bg-transparent">
               <div class="row">
                 <div class="col-4">
-                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['CLO_ID'];?>">
+                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['CLO_ID']."claiming";?>">
                     <center><?php echo "<b>รหัสการเคลม : ".$row['CLO_ID']."</b>";?></center>
                   </a>
                 </div>
@@ -537,7 +557,7 @@
               </div>
             </div>
 
-            <div id="<?php echo "show".$row['CLO_ID']; ?>" class="collapse" data-parent="#accordion">
+            <div id="<?php echo "show".$row['CLO_ID']."claiming"; ?>" class="collapse" data-parent="#accordion3">
               <div class="card-body">
                 <!--line 1-->
                 <div class="row justify-content-start">
@@ -629,7 +649,7 @@
                         <td align="center" width='5%'><?php echo $i ?></td>
                         <td align="center" width='10%'><?php echo $row2['PRO_ID'] ?></td>
                         <td><?php echo $row2['PRO_NAME'] ?></td>
-                        <td align="center" width='10%'><?php echo $row2['CLAD_AMOUNT'] ?></td>
+                        <td align="center" width='20%'><?php echo $row2['CLAD_AMOUNT'] ?></td>
                         <td align="center" width='15%'>
                           <?php
                             if($row2['CLAD_STATUS']=='Y') {
@@ -649,21 +669,18 @@
                     }
                   ?>
                 </table>
-                </div>
               </div>
             </div>
           </div>
-
-        <?php
-          }
-        ?>
-
+            <?php
+            }
+            ?>
+        </div>
       </div>
-    </div>
 
-    <!--claimed--->
-    <div id="claimed" class="container tab-pane fade"><br>
-      <div id="accordion">
+      <!--claimed--->
+      <div id="menu4" class="tab-pane"><br>
+        <div id="accordion4">
         <?php
           $sql = "SELECT * FROM (CLAIMSLIP_ORDER NATURAL JOIN ORDERS) NATURAL JOIN SELLER  WHERE CLO_STATUS = 'Y' ORDER BY CLO_ID ";
           $sql_query = mysql_query($sql);
@@ -673,7 +690,7 @@
             <div class="card-header bg-transparent">
               <div class="row">
                 <div class="col-4">
-                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['CLO_ID'];?>">
+                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['CLO_ID']."claimed";?>">
                     <center><?php echo "<b>รหัสการเคลม : ".$row['CLO_ID']."</b>";?></center>
                   </a>
                 </div>
@@ -695,7 +712,7 @@
               </div>
             </div>
 
-            <div id="<?php echo "show".$row['CLO_ID']; ?>" class="collapse" data-parent="#accordion">
+            <div id="<?php echo "show".$row['CLO_ID']."claimed"; ?>" class="collapse" data-parent="#accordion4">
               <div class="card-body">
                 <!--line 1-->
                 <div class="row justify-content-start">
@@ -787,7 +804,7 @@
                         <td align="center" width='5%'><?php echo $i ?></td>
                         <td align="center" width='10%'><?php echo $row2['PRO_ID'] ?></td>
                         <td><?php echo $row2['PRO_NAME'] ?></td>
-                        <td align="center" width='10%'><?php echo $row2['CLAD_AMOUNT'] ?></td>
+                        <td align="center" width='20%'><?php echo $row2['CLAD_AMOUNT'] ?></td>
                         <td align="center" width='15%'>
                           <?php
                             if($row2['CLAD_STATUS']=='Y') {
@@ -807,6 +824,355 @@
                     }
                   ?>
                 </table>
+              </div>
+            </div>
+          </div>
+
+        <?php
+          }
+        ?>
+
+        </div>
+      </div>
+
+
+      <!--getorder-->
+      <div id="menu5" class="tab-pane"><br>
+          <div id="accordion5">
+          <?php
+            $sql = "SELECT * FROM (GET_PRODUCT_ORDER NATURAL JOIN ORDERS) NATURAL JOIN SELLER  ORDER BY GPO_ID ";
+            $sql_query = mysql_query($sql);
+            while($row = mysql_fetch_array($sql_query)){
+          ?>
+            <div class="card">
+              <div class="card-header bg-transparent">
+                <div class="row">
+                  <div class="col-4">
+                    <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['GPO_ID']."getorder";?>">
+                      <center><?php echo "<b>รหัสการรับ : ".$row['GPO_ID']."</b>";?></center>
+                    </a>
+                  </div>
+                  <div class="col-8">
+                  </div>
+                </div>
+              </div>
+
+              <div id="<?php echo "show".$row['GPO_ID']."getorder"; ?>" class="collapse" data-parent="#accordion5">
+                <div class="card-body">
+                  <!--line 1-->
+                  <div class="row justify-content-start">
+                    <div class="col-2 ">
+                      รหัสนำเข้า
+                    </div>
+                    <div class="col-5">
+                      <b><?php echo $row['ORD_ID']; ?></b>
+                    </div>
+                  </div>
+
+                  <!--line 2-->
+                  <div class="row justify-content-start">
+                    <div class="col-2 ">
+                      ผู้ขาย
+                    </div>
+                    <div class="col-5">
+                      <b><?php echo $row['SEL_ID']."    ".$row['SEL_NAME']; ?></b>
+                    </div>
+                  </div>
+
+                  <!--line 3-->
+                  <div class="row justify-content-start">
+                    <div class="col-2 ">
+                      วันกำหนดได้รับ
+                    </div>
+                    <div class="col-2">
+                      <b><?php echo $row['ORD_GETDATE']; ?></b>
+                    </div>
+                  </div>
+
+                  <!--line 4-->
+                  <div class="row justify-content-start">
+                    <div class="col-2 ">
+                      วันที่รับ
+                    </div>
+                    <div class="col-2">
+                      <b><?php echo $row['GPO_DATE']; ?></b>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <br>
+                  </div>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr align="center">
+                        <th>ลำดับ</th>
+                        <th>รหัสอะไหล่</th>
+                        <th>ชื่อ</th>
+                        <th>จำนวนที่รับ</th>
+                      </tr>
+                    </thead>
+                    <?php
+                      $gpo_id = $row['GPO_ID'];
+                      $sqlt = "SELECT * FROM (GET_PRODUCT_ORDER NATURAL JOIN GET_PRODUCT_ORDER_DETAIL) NATURAL JOIN PRODUCT WHERE GPO_ID = $gpo_id ORDER BY GPO_ID,GPOD_NUMBER";
+                      $sqlt_query =mysql_query($sqlt);
+                      $i=1;
+                      while($row2 = mysql_fetch_array($sqlt_query)){
+                    ?>
+                        <tr>
+                          <td align="center" width='5%'><?php echo $i ?></td>
+                          <td align="center" width='10%'><?php echo $row2['PRO_ID'] ?></td>
+                          <td><?php echo $row2['PRO_NAME'] ?></td>
+                          <td align="center" width='20%'><?php echo $row2['GPOD_GETAMOUNT'] ?></td>
+                        </tr>
+                    <?php
+                    $i++;
+                      }
+                    ?>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          <?php
+            }
+          ?>
+
+        </div>
+      </div>
+
+      <!--getclaimorder-->
+      <div id="menu6" class="tab-pane"><br>
+            <div id="accordion6">
+            <?php
+              $sql = "SELECT * FROM ((GET_PRODUCT_CLAIM_ORDER NATURAL JOIN CLAIMSLIP_ORDER) NATURAL JOIN ORDERS) NATURAL JOIN SELLER ORDER BY GPCO_ID ";
+              $sql_query = mysql_query($sql);
+              while($row = mysql_fetch_array($sql_query)){
+            ?>
+              <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row">
+                    <div class="col-4">
+                      <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['GPCO_ID']."getclaimorder";?>">
+                        <center><?php echo "<b>รหัสการรับเคลม : ".$row['GPCO_ID']."</b>";?></center>
+                      </a>
+                    </div>
+                    <div class="col-8">
+                    </div>
+                  </div>
+                </div>
+
+                <div id="<?php echo "show".$row['GPCO_ID']."getclaimorder"; ?>" class="collapse" data-parent="#accordion6">
+                  <div class="card-body">
+                    <!--line 1-->
+                    <div class="row justify-content-start">
+                      <div class="col-2 ">
+                        รหัสการเคลม
+                      </div>
+                      <div class="col-5">
+                        <b><?php echo $row['CLO_ID']; ?></b>
+                      </div>
+                    </div>
+
+                    <!--line 2-->
+                    <div class="row justify-content-start">
+                      <div class="col-2 ">
+                        รหัสนำเข้า
+                      </div>
+                      <div class="col-5">
+                        <b><?php echo $row['ORD_ID']; ?></b>
+                      </div>
+                    </div>
+
+                    <!--line 3-->
+                    <div class="row justify-content-start">
+                      <div class="col-2 ">
+                        ผู้ขาย
+                      </div>
+                      <div class="col-5">
+                        <b><?php echo $row['SEL_ID']."    ".$row['SEL_NAME']; ?></b>
+                      </div>
+                    </div>
+
+                    <!--line 4-->
+                    <div class="row justify-content-start">
+                      <div class="col-2 ">
+                        วันกำหนดได้รับ
+                      </div>
+                      <div class="col-2">
+                        <b><?php echo $row['CLO_GETDATE']; ?></b>
+                      </div>
+                    </div>
+
+                    <!--line 5-->
+                    <div class="row justify-content-start">
+                      <div class="col-2 ">
+                        วันที่รับ
+                      </div>
+                      <div class="col-2">
+                        <b><?php echo $row['GPCO_DATE']; ?></b>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <br>
+                    </div>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr align="center">
+                          <th>ลำดับ</th>
+                          <th>รหัสอะไหล่</th>
+                          <th>ชื่อ</th>
+                          <th>จำนวนที่รับ</th>
+                        </tr>
+                      </thead>
+                      <?php
+                        $gpco_id = $row['GPCO_ID'];
+                        $sqlt = "SELECT * FROM (GET_PRODUCT_CLAIM_ORDER NATURAL JOIN GET_PRODUCT_CLAIM_ORDER_DETAIL) NATURAL JOIN PRODUCT WHERE GPCO_ID = $gpco_id ORDER BY GPCO_ID,GPCOD_NUMBER";
+                        $sqlt_query =mysql_query($sqlt);
+                        $i=1;
+                        while($row2 = mysql_fetch_array($sqlt_query)){
+                      ?>
+                          <tr>
+                            <td align="center" width='5%'><?php echo $i ?></td>
+                            <td align="center" width='10%'><?php echo $row2['PRO_ID'] ?></td>
+                            <td><?php echo $row2['PRO_NAME'] ?></td>
+                            <td align="center" width='20%'><?php echo $row2['GPCOD_GETAMOUNT'] ?></td>
+                          </tr>
+                      <?php
+                      $i++;
+                        }
+                      ?>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            <?php
+              }
+            ?>
+
+          </div>
+      </div>
+
+      <!--payment-->
+      <div id="menu7" class="tab-pane"><br>
+        <div id="accordion7">
+        <?php
+          $sql = "SELECT * FROM (PAYMENT_ORDER NATURAL JOIN ORDERS) NATURAL JOIN SELLER ORDER BY PAYO_ID ";
+          $sql_query = mysql_query($sql);
+          while($row = mysql_fetch_array($sql_query)){
+        ?>
+          <div class="card">
+            <div class="card-header bg-transparent">
+              <div class="row">
+                <div class="col-4">
+                  <a class="card-link" data-toggle="collapse" href="#<?php echo "show".$row['PAYO_ID']."paymentorder";?>">
+                    <center><?php echo "<b>รหัสการชำระเงิน : ".$row['PAYO_ID']."</b>";?></center>
+                  </a>
+                </div>
+                <div class="col-8">
+                </div>
+              </div>
+            </div>
+
+            <div id="<?php echo "show".$row['PAYO_ID']."paymentorder"; ?>" class="collapse" data-parent="#accordion7">
+              <div class="card-body">
+                <!--line 1-->
+                <div class="row justify-content-start">
+                  <div class="col-2 ">
+                    รหัสนำเข้า
+                  </div>
+                  <div class="col-5">
+                    <b><?php echo $row['ORD_ID']; ?></b>
+                  </div>
+                </div>
+
+                <!--line 2-->
+                <div class="row justify-content-start">
+                  <div class="col-2 ">
+                    ผู้ขาย
+                  </div>
+                  <div class="col-5">
+                    <b><?php echo $row['SEL_ID']."    ".$row['SEL_NAME']; ?></b>
+                  </div>
+                </div>
+
+                <!--line 3-->
+                <div class="row justify-content-start">
+                  <div class="col-2 ">
+                    วันกำหนดชำระเงิน
+                  </div>
+                  <div class="col-2">
+                    <b><?php echo $row['ORD_PAYDATE']; ?></b>
+                  </div>
+                </div>
+
+                <!--line 4-->
+                <div class="row justify-content-start">
+                  <div class="col-2 ">
+                    วันที่ชำระเงิน
+                  </div>
+                  <div class="col-2">
+                    <b><?php echo $row['PAYO_DATE']; ?></b>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <br>
+                </div>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr align="center">
+                      <th>ลำดับ</th>
+                      <th>รหัสอะไหล่</th>
+                      <th>ชื่อ</th>
+                      <th>จำนวนที่สั่ง</th>
+                      <th>ราคารวม</th>
+                    </tr>
+                  </thead>
+                  <?php
+                    $ord_id = $row['ORD_ID'];
+                    $sqlt = "SELECT * FROM (ORDERS NATURAL JOIN ORDER_DETAIL) NATURAL JOIN PRODUCT WHERE ORD_ID = $ord_id ORDER BY ORD_ID,ORDD_NUMBER";
+                    $sqlt_query =mysql_query($sqlt);
+                    $i=1;
+                    while($row2 = mysql_fetch_array($sqlt_query)){
+                  ?>
+                      <tr>
+                        <td align="center" width='5%'><?php echo $i ?></td>
+                        <td align="center" width='10%'><?php echo $row2['PRO_ID'] ?></td>
+                        <td><?php echo $row2['PRO_NAME'] ?></td>
+                        <td align="center" width='10%'><?php echo $row2['ORDD_AMOUNT'] ?></td>
+                        <td align="center"><?php echo $row2['ORDD_TOTALPRICE'] ?></td>
+                      </tr>
+                  <?php
+                  $i++;
+                    }
+                  ?>
+                </table>
+                <div class="row">
+                  <br>
+                </div>
+                <div class="row justify-content-end">
+                  <div class="col-2 ">
+                    ราคารวม
+                  </div>
+                  <div class="col-2 justify-content-end">
+                    <h5 align="right"><?php echo $row['ORD_TOTALPRICE']; ?></h5>
+                  </div>
+                  <div class="col-1 ">
+                    บาท
+                  </div>
+                </div>
+                <div class="row justify-content-end">
+                  <div class="col-2 align-items-center">
+                    ยอดชำระ
+                  </div>
+                  <div class="col-2 justify-content-end bg-success ">
+                    <h5 class="text-white" align="right"><?php echo $row['ORD_TOTALPRICE']; ?></h5>
+                  </div>
+                  <div class="col-1 ">
+                    บาท
+                  </div>
                 </div>
               </div>
             </div>
@@ -815,18 +1181,9 @@
         <?php
           }
         ?>
+
+        </div>
       </div>
-    </div>
-
-    <!--getorder-->
-    <div id="getorder" class="container tab-pane fade"><br>
-
-    </div>
-    <div id="getclaimorder" class="container tab-pane fade"><br>
-
-    </div>
-    <div id="paymentorder" class="container tab-pane fade"><br>
-
     </div>
   </div>
 
@@ -1055,10 +1412,16 @@
 
 
 <script>
-$(document).ready(function(){
-  $(".nav-tabs a").click(function(){
-    $(this).tab('show');
-  });
+$(function() {
+    $('.tabs li').on('click', function() {
+        var tabId = $(this).attr('data-tab');
+
+        $('.tabs li').removeClass('current');
+        $('.tab-pane').removeClass('current');
+
+        $(this).addClass('current');
+        $('#' + tabId).addClass('current');
+    });
 });
 </script>
 
