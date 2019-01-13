@@ -126,8 +126,11 @@ html {overflow-y: scroll;}
                     <center><?php echo "<b>เลขที่ใบซ่อม : ".$row['REP_ID']."</b>";?></center>
                   </a>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                   <?php echo "ลูกค้า : <b>".$row['CUS_FNAME']."  ".$row['CUS_LNAME']."</b>" ?>
+                </div>
+                <div class="col-3">
+                  <?php echo "ทะเบียนรถ : <b>".$row['CAR_LICENSE']."  ".$row['CAR_PROVINCE']."</b>" ?>
                 </div>
                 <div class="col-2">
                   <?php
@@ -147,6 +150,11 @@ html {overflow-y: scroll;}
 
             <div id="<?php echo "show".$row['REP_ID']."repairslip"; ?>" class="collapse" data-parent="#accordion1">
               <div class="card-body">
+                <div class="row mt-3 mb-3 justify-content-end">
+                  <button class="btn btn-success m-1" data-toggle = "modal" data-target="#cfPayment" data-id="<?php echo $row['REP_ID'] ?>" data-fname="<?php echo $row['CUS_FNAME'] ?>" data-lname="<?php echo $row['CUS_LNAME'] ?>"  data-car="<?php echo $row['CAR_LICENSE'] ?>" data-province="<?php echo $row['CAR_PROVINCE'] ?>" data-ntotalcost="<?php echo $row['REP_NETTOTALCOST'] ?>">
+                    ยืนยันการชำระเงิน
+                  </button>
+                </div>
                 <div class="row mt-3 mb-1">
                   <div class="col-8">
                     <label><h5>ข้อมูลลูกค้า</h5></label>
@@ -770,6 +778,62 @@ html {overflow-y: scroll;}
 
 </div>
 
+<!--cf.Payment Repairslip-->
+<form  method="post" action="update.data.php">
+  <div class="modal fade" id="cfPayment">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header align-items-center">
+          <i class='fab fa-bitcoin m-1' style='font-size:35px;color:green'></i>
+          <h4 class="modal-title" align="center">ยืนยันการชำระเงิน</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input type="hidden" name="action" value="updatePaymentREP">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="repid">รหัสการซ่อม : </label>
+                <input  class ="form-control" type="text" name="repid" id="repid" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              <div class="form-group">
+                <label for="repid">ลูกค้า : </label>
+                <input  class ="form-control" type="text" name="repid" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              <div class="form-group">
+                <label for="repid">ทะเบียนรถ : </label>
+                <input  class ="form-control" type="text" name="repid" id="cars" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              <div class="form-group">
+                <label for="repid">รวมค่าใช้จ่าย : </label>
+                <input  class ="form-control" type="text" name="repid" id="netcost" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              </div>
+            <div class="col align-items-center">
+                <div class="row mb-5"></div>
+                <div class="row mb-3"></div>
+                <i class='fab fa-bitcoin' style='font-size:200px;color:green'></i>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+          <button name="save" type="submit" class="btn btn-success" id="submit" >บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
 <script>
 $(function() {
     $('.tabs li').on('click', function() {
@@ -782,6 +846,23 @@ $(function() {
         $('#' + tabId).addClass('current');
     });
 });
+
+
+$(document).ready(function() {
+	$('#cfPayment').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget);
+	  var id= button.data('id');
+    var name = button.data('fname')+"  "+button.data('lname');
+    var cars = button.data('car')+"  "+button.data('province');
+    var netcost = button.data('ntotalcost')+"  บาท";
+	  var modal = $(this);
+	  modal.find('#repid').val(id);
+    modal.find('#cusname').val(name);
+    modal.find('#cars').val(cars);
+    modal.find('#netcost').val(netcost);
+  });
+});
+
 </script>
 
 </body>
