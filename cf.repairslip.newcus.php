@@ -128,8 +128,8 @@ connect();
       <div class="row m-1">
         <div class="col">
           <label for="getdate"><small>วันรับรถ</small></label> <br>
-          <b class="text-primary"><?php echo $getdate ?></b>
-          <input type="hidden" name="getdate" value="<?php echo $getdate ?>">
+          <b class="text-primary"><?php if($getdate==null){echo "ยังไม่มารับรถ"; }else{ echo $getdate; } ?></b>
+          <input type="hidden" name="getdate" value="">
         </div>
       </div>
     </div>
@@ -245,7 +245,7 @@ connect();
               <td><?php echo $resultemp['EMP_FNAME']."  ".$resultemp['EMP_LNAME'] ?></td>
               <input type="hidden" name="service[]" value="<?php echo $result['SER_ID'] ?>">
               <input type="hidden" name="seramount[]" value="<?php echo $seramount[$i] ?>">
-              <input type="hidden" name="sertotalcost" value="<?php echo $seramount[$i]*$result['SER_BEGINCOST'] ?>">
+              <input type="hidden" name="sertotalcost[]" value="<?php echo $seramount[$i]*$result['SER_BEGINCOST'] ?>">
               <input type="hidden" name="employee[]" value="<?php echo $employee[$i] ?>">
             </tr>
         <?php
@@ -293,18 +293,6 @@ connect();
     <div class="col-5">
       <div class="row">
         <div class="col-4">
-          <small>จำนวนรายการบริการ</small>
-        </div>
-        <div class="col-3 text-right">
-          <b class="text-primary"><?php echo count($service) ?></b>
-          <input type="hidden" name="countservice" value="<?php echo count($service) ?>">
-        </div>
-        <div class="col-4">
-          <small>รายการ</small>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4">
           <small>รวมค่าบริการ</small>
         </div>
         <div class="col-3 text-right">
@@ -313,18 +301,6 @@ connect();
         </div>
         <div class="col-4">
           <small>บาท</small>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4">
-          <small>จำนวนรายการอะไหล่</small>
-        </div>
-        <div class="col-3 text-right">
-          <b class="text-primary"><?php echo count($product) ?></b>
-          <input type="hidden" name="countproduct" value="<?php echo count($product) ?>">
-        </div>
-        <div class="col-4">
-          <small>รายการ</small>
         </div>
       </div>
       <div class="row">
@@ -376,7 +352,7 @@ connect();
             ?>
             </b>
           </h5>
-          <input type="hidden" name="nettotalcost" value="<?php echo $nettotalcost ?>">
+          <input type="hidden" name="nettotalcost" value="<?php echo $nettotalcost; ?>">
         </div>
         <div class="col-4">
           <small>บาท</small>
@@ -384,7 +360,10 @@ connect();
       </div>
     </div>
   </div>
-  <div class="row justify-content-center m-5">
+  <div class="row justify-content-center mt-5 mb-1 ">
+    <h5 class="text-danger"> ** กรุณาตรวจสอบข้อมูลของลูกค้าให้ถูกต้องก่อนกดยืนยัน **</h5>
+  </div>
+  <div class="row justify-content-center mt-1 mb-5">
       <button type="submit" name="save" class="btn btn-success btn-block shadow-sm">ยืนยัน</button>
   </div>
   </form>

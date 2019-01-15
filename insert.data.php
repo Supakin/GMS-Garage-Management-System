@@ -317,10 +317,10 @@
       $ins_car_query = mysql_query($ins_car_sql) or die(mysql_error());
 
       //INSERT data of Repairslip to REPAIRSLIP
-      $ins_rep_sql = "INSERT INTO REPAIRSLIP VALUES (\"$rep_id\",\"$cus_id\",\"$car_vin\",\"$empleader\",\"$date\",\"$getdate\",$totalcost,\"$rep_detail\",\"$rep_kilomater\",'N','N',$nettotalcost)";
+      $ins_rep_sql = "INSERT INTO REPAIRSLIP(REP_ID,CUS_ID,CAR_VIN,EMP_ID,REP_DATE,REP_DATE_GETCAR,REP_TOTALCOST,REP_DETAIL,REP_KILOMATER,REP_REPAIRSTATUS,REP_PAYMENTSTATUS,REP_NETTOTALCOST) VALUES (\"$rep_id\",\"$cus_id\",\"$car_vin\",\"$empleader\",\"$date\",\"$getdate\",$totalcost,\"$rep_detail\",\"$rep_kilomater\",'N','N',$nettotalcost)";
       $ins_rep_query = mysql_query($ins_rep_sql) or die(mysql_error());
 
-      //INSERT data of Service detail of SERVICE_DETAILTABLE
+      //INSERT data of Service detail of SERVICE_DETAIL TABLE
       for($i=0;$i<count($service);$i++){
         //CREATE PK for SERD
         $sqlid = "SELECT MAX(SERD_NUMBER) FROM SERVICE_DETAIL";

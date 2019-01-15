@@ -16,5 +16,13 @@
       echo "<meta http-equiv ='refresh'content='0;URL=service.php'>";
     }
 
+    //UPDATE REP_PAYMENTSTATUS of REPAIRSLIP
+    if(isset($_POST['action']) && $_POST['action']=='updateREP_PAYMENTSTATUS'){
+      $sql = "UPDATE REPAIRSLIP SET REP_PAYMENTSTATUS='Y' , REP_DATE_GETCAR = CURDATE() WHERE REP_ID = '".$_POST["rep_id"]."'";
+      $sql_query = mysql_query($sql) or die(mysql_error());
+      echo "<script type='text/javascript'>alert('".$_POST['cusname']." ทำการชำระเงินของรหัสการซ่อม : ".$_POST['rep_id']." เรียบร้อยแล้วค่ะ');</script>" ;
+      echo "<meta http-equiv ='refresh'content='0;URL=main_service.php'>";
+    }
+
   disconnect();
 ?>

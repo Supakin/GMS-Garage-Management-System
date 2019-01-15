@@ -101,7 +101,7 @@ connect();
       </div>
       <div class="row m-1">
         <label for="getdate">วันรับรถ</label>
-        <input type="date" name="getdate" class="form-control form-control-sm" required >
+        <input type="date" name="getdate" class="form-control form-control-sm">
       </div>
     </div>
   </div>

@@ -150,11 +150,6 @@ html {overflow-y: scroll;}
 
             <div id="<?php echo "show".$row['REP_ID']."repairslip"; ?>" class="collapse" data-parent="#accordion1">
               <div class="card-body">
-                <div class="row mt-3 mb-3 justify-content-end">
-                  <button class="btn btn-success m-1" data-toggle = "modal" data-target="#cfPayment" data-id="<?php echo $row['REP_ID'] ?>" data-fname="<?php echo $row['CUS_FNAME'] ?>" data-lname="<?php echo $row['CUS_LNAME'] ?>"  data-car="<?php echo $row['CAR_LICENSE'] ?>" data-province="<?php echo $row['CAR_PROVINCE'] ?>" data-ntotalcost="<?php echo $row['REP_NETTOTALCOST'] ?>">
-                    ยืนยันการชำระเงิน
-                  </button>
-                </div>
                 <div class="row mt-3 mb-1">
                   <div class="col-8">
                     <label><h5>ข้อมูลลูกค้า</h5></label>
@@ -200,7 +195,17 @@ html {overflow-y: scroll;}
                     <div class="row m-1">
                       <div class="col">
                         <label for="getdate"><small>วันรับรถ</small></label> <br>
-                        <b class="text-primary"><?php echo $row['REP_DATE_GETCAR'] ?></b>
+                        <?php
+                          if($row['REP_DATE_GETCAR']=='0000-00-00'){
+                        ?>
+                            <b class="text-danger"><?php  echo "ยังไม่มารับรถ";?></b>
+                        <?php
+                          }else{
+                        ?>
+                            <b class="text-primary"><?php echo $row['REP_DATE_GETCAR'] ?></b>
+                        <?php
+                          }
+                        ?>
                       </div>
                     </div>
                   </div>
@@ -274,6 +279,7 @@ html {overflow-y: scroll;}
                 </div>
                 <div class="row">
                   <div class="col-6">
+                    <small>
                     <table class="table table-bordered table-sm">
                       <thead>
                         <tr align="center">
@@ -289,14 +295,14 @@ html {overflow-y: scroll;}
                         $rep_id = $row['REP_ID'];
                         $sqlt1 = "SELECT *  FROM (EMPLOYEE NATURAL JOIN SERVICE_DETAIL) NATURAL JOIN SERVICE  WHERE REP_ID = $rep_id";
                         $sqlt1_query = mysql_query($sqlt1) or die(mysql_error());
-                        $i = 1;
+                        $i = 0;
                         while($row2 = mysql_fetch_array($sqlt1_query)){
                       ?>
                           <tr>
                             <td align="center"><?php echo $i+1; ?></td>
                             <td align="center"><?php echo $row2['SER_ID'] ?></td>
                             <td><?php echo $row2['SER_NAME'] ?></td>
-                            <td align="center"<?php echo $row2['SERD_AMOUNT'] ?></td>
+                            <td align="center"><?php echo $row2['SERD_AMOUNT'] ?></td>
                             <td align="center"><?php echo $row2['SERD_COST'] ?></td>
                             <td><?php echo $row2['EMP_FNAME']."  ".$row2['EMP_LNAME'] ?></td>
                           </tr>
@@ -311,9 +317,9 @@ html {overflow-y: scroll;}
                       <thead>
                         <tr align="center">
                           <th width="5%">ลำดับ</th>
-                          <th>รหัส</th>
+                          <th width="10%">รหัส</th>
                           <th width="30%">อะไหล่</th>
-                          <th width="10%">ราคาต่อชิ้น</th>
+                          <th width="15%">ราคา/ชิ้น</th>
                           <th width= "5%">จำนวน</th>
                           <th width="10%">ราคารวม</th>
                         </tr>
@@ -321,14 +327,15 @@ html {overflow-y: scroll;}
                       <?php
                         $sqlt2 = "SELECT * FROM REQUISITION NATURAL JOIN PRODUCT WHERE REP_ID = $rep_id";
                         $sqlt2_query = mysql_query($sqlt2) or die(mysql_error());
-                        $j=1;
+                        $j=0;
                         while($row2 = mysql_fetch_array($sqlt2_query)){
                       ?>
                           <tr>
-                            <td align="center"><?php echo $i+1; ?></td>
+                            <td align="center"><?php echo $j+1; ?></td>
                             <td align="center"><?php echo $row2['PRO_ID'] ?></td>
                             <td><?php echo $row2['PRO_NAME'] ?></td>
-                            <td align="center"<?php echo $row2['REQ_AMOUNT'] ?></td>
+                            <td align="center"><?php echo $row2['PRO_SELLPRICE'] ?></td>
+                            <td align="center"><?php echo $row2['REQ_AMOUNT'] ?> </td>
                             <td align="center"><?php echo $row2['REQ_TOTALPRICE'] ?></td>
                           </tr>
 
@@ -337,22 +344,12 @@ html {overflow-y: scroll;}
                         }
                       ?>
                     </table>
+                  </small>
                   </div>
                 </div>
 
                 <div class="row mt-2  justify-content-end">
                   <div class="col-5">
-                    <div class="row">
-                      <div class="col-4">
-                        <small>จำนวนรายการบริการ</small>
-                      </div>
-                      <div class="col-3 text-right">
-                        <b class="text-primary"><?php echo $i ?></b>
-                      </div>
-                      <div class="col-4">
-                        <small>รายการ</small>
-                      </div>
-                    </div>
                     <div class="row">
                       <div class="col-4">
                         <small>รวมค่าบริการ</small>
@@ -367,17 +364,6 @@ html {overflow-y: scroll;}
                       </div>
                       <div class="col-4">
                         <small>บาท</small>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                        <small>จำนวนรายการอะไหล่</small>
-                      </div>
-                      <div class="col-3 text-right">
-                        <b class="text-primary"><?php echo $j ?></b>
-                      </div>
-                      <div class="col-4">
-                        <small>รายการ</small>
                       </div>
                     </div>
                     <div class="row">
@@ -431,6 +417,13 @@ html {overflow-y: scroll;}
                       </div>
                       <div class="col-4">
                         <small>บาท</small>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-9">
+                        <button class="btn btn-success btn-block" data-toggle = "modal" data-target="#cfPayment" data-id="<?php echo $row['REP_ID'] ?>" data-fname="<?php echo $row['CUS_FNAME'] ?>" data-lname="<?php echo $row['CUS_LNAME'] ?>"  data-car="<?php echo $row['CAR_LICENSE'] ?>" data-province="<?php echo $row['CAR_PROVINCE'] ?>" data-ntotalcost="<?php echo $row['REP_NETTOTALCOST'] ?>">
+                          ยืนยันการชำระเงิน
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -793,7 +786,7 @@ html {overflow-y: scroll;}
 
         <!-- Modal body -->
         <div class="modal-body">
-          <input type="hidden" name="action" value="updatePaymentREP">
+          <input type="hidden" name="action" value="updateREP_PAYMENTSTATUS">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -802,15 +795,15 @@ html {overflow-y: scroll;}
               </div>
               <div class="form-group">
                 <label for="repid">ลูกค้า : </label>
-                <input  class ="form-control" type="text" name="repid" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+                <input  class ="form-control" type="text" name="cusname" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
               </div>
               <div class="form-group">
                 <label for="repid">ทะเบียนรถ : </label>
-                <input  class ="form-control" type="text" name="repid" id="cars" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+                <input  class ="form-control" type="text" name="cars" id="cars" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
               </div>
               <div class="form-group">
                 <label for="repid">รวมค่าใช้จ่าย : </label>
-                <input  class ="form-control" type="text" name="repid" id="netcost" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+                <input  class ="form-control" type="text" name="netcost" id="netcost" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
               </div>
               </div>
             <div class="col align-items-center">
