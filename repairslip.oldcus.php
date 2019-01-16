@@ -1,6 +1,17 @@
 <?php
-require_once('GMSdb/connect.inc.php');
-connect();
+  require_once('GMSdb/connect.inc.php');
+  connect();
+
+  $cus_sql;
+  if($_POST['car_license']==null){
+    $cus_sql = "SELECT *  FROM CUSTOMER NATURAL JOIN CARS WHERE CUS_ID = '".$_POST['cus_id']."'";
+  }else{
+    $cus_sql = "SELECT *  FROM CUSTOMER NATURAL JOIN CARS WHERE CUS_ID = '".$_POST['cus_id']."' AND CAR_LICENSE = '".$_POST['car_license']."' ";
+  }
+
+  $cus_query = mysql_query($cus_sql) or die(mysql_error());
+  $cusresult = mysql_fetch_array($cus_query);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,13 +47,21 @@ connect();
 <body>
 <div class="container">
   <div class="row justify-content-center align-content-center">
-    <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('main_service.php')">
+    <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.history.go(-1);">
       <i class='fas fa-home' style='font-size:10px;color:white'></i>
       กลับก่อนหน้า
     </button>
   </div>
-  <form  action="cf.repairslip.newcus.php" method="post">
-
+  <form  action="cf.repairslip.oldcus.php" method="post">
+    <?php
+      $newcar = null;
+      if(isset($_POST['car_license'])==null){
+        $newcar = 'new';
+      }else{
+        $newcar = 'old';
+      }
+    ?>
+    <input type="hidden" name="checknewcar" value="<?php echo $newcar ?>">
   <div class="row mt-3 mb-3 align-items-center">
     <div class="col-1">
         <i class="fas fa-wrench" style='font-size:65px;color:black'></i>
@@ -60,8 +79,11 @@ connect();
     </div>
   </div>
   <div class="row mt-3 mb-1">
-    <div class="col-8">
+    <div class="col-2">
       <label><h4>ข้อมูลลูกค้า</h4></label>
+    </div>
+    <div class="col-6">
+      <input name="updCUS" type="checkbox" class="form-check-input" value="มีการแก้ไข"><p class="text-danger">มีการแก้ไข</p>
     </div>
     <div class="col-4">
       <label><h4>ข้อมูลการรับรถ</h4></label>
@@ -72,25 +94,25 @@ connect();
       <div class="row">
         <div class="col-3">
           <label for="cus_id">หมายเลขบัตรประชาชน</label>
-          <input type="text" name="cus_id" class="form-control form-control-sm" minlength="13" maxlength="13" required >
+          <input type="text" name="cus_id" class="form-control form-control-sm" minlength="13" maxlength="13" value="<?php echo $cusresult['CUS_ID'] ?>" required >
         </div>
         <div class="col-4">
           <label for="cus_fname">ชื่อ</label>
-          <input type="text" name="cus_fname" class="form-control form-control-sm"  required >
+          <input type="text" name="cus_fname" class="form-control form-control-sm" value="<?php echo $cusresult['CUS_FNAME'] ?>" required >
         </div>
         <div class="col-4">
           <label for="cus_lname">นามสกุล</label>
-          <input type="text" name="cus_lname" class="form-control form-control-sm"  required >
+          <input type="text" name="cus_lname" class="form-control form-control-sm" value="<?php echo $cusresult['CUS_LNAME'] ?>" required >
         </div>
       </div>
       <div class="row">
         <div class="col-3">
           <label for="cus_tel">เบอร์โทรติดต่อ</label>
-          <input type="text" name="cus_tel" class="form-control form-control-sm"  required  maxlength="10">
+          <input type="text" name="cus_tel" class="form-control form-control-sm"  value="<?php echo $cusresult['CUS_TEL'] ?>"  required  maxlength="10">
         </div>
         <div class="col">
           <label for="cus_address">ที่อยู่</label>
-          <textarea name="cus_address" class="form-control form-control-sm"  rows="2" cols="80"></textarea>
+          <textarea name="cus_address" class="form-control form-control-sm"  rows="2" cols="80"><?php echo $cusresult['CUS_ADDRESS'] ?></textarea>
         </div>
       </div>
     </div>
@@ -106,38 +128,43 @@ connect();
     </div>
   </div>
   <div class="row mt-3 mb-1">
-    <label><h4>ข้อมูลรถของลูกค้า</h4></label>
+    <div class="col-2">
+      <label><h4>ข้อมูลรถของลูกค้า</h4></label>
+    </div>
+    <div class="col-6">
+      <input name="updCAR" type="checkbox" class="form-check-input" value="มีการแก้ไข"><p class="text-danger">มีการแก้ไข</p>
+    </div>
   </div>
   <div class="row m-1">
     <div class="col-2">
       <label for="car_license">ทะเบียนรถ</label>
-      <input type="text" name="car_license" class="form-control form-control-sm"  required  maxlength="10">
+      <input type="text" name="car_license" class="form-control form-control-sm"  required  maxlength="10" value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_LICENSE'];} ?>">
     </div>
     <div class="col-2">
       <label for="car_province">จังหวัด</label>
-      <input type="text" name="car_province" class="form-control form-control-sm"  required >
+      <input type="text" name="car_province" class="form-control form-control-sm"  required value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_PROVINCE'];} ?>">
     </div>
     <div class="col-2">
       <label for="car_brand">ยี่ห้อ</label>
-      <input type="text" name="car_brand" class="form-control form-control-sm"  required >
+      <input type="text" name="car_brand" class="form-control form-control-sm"  required value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_BRAND'];} ?>">
     </div>
     <div class="col-2">
       <label for="car_model">รุ่น</label>
-      <input type="text" name="car_model" class="form-control form-control-sm"  required >
+      <input type="text" name="car_model" class="form-control form-control-sm"  required value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_MODEL'];} ?>">
     </div>
     <div class="col-2">
       <label for="car_color">สี</label>
-      <input type="text" name="car_color" class="form-control form-control-sm"  required >
+      <input type="text" name="car_color" class="form-control form-control-sm"  required value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_COLOR'];} ?>">
     </div>
   </div>
   <div class="row m-1">
     <div class="col-3">
       <label for="car_engine">หมายเลขเครื่องยนต์</label>
-      <input type="text" name="car_engine" class="form-control form-control-sm"  required >
+      <input type="text" name="car_engine" class="form-control form-control-sm"  required value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_ENGINE_ID'];} ?>">
     </div>
     <div class="col-3">
       <label for="car_vin">หมายเลขตัวถัง</label>
-      <input type="text" name="car_vin" minlength="17" maxlength="17" class="form-control form-control-sm" >
+      <input type="text" name="car_vin" minlength="17" maxlength="17" class="form-control form-control-sm" value="<?php if($_POST['car_license']!=null){ echo $cusresult['CAR_VIN'];} ?>">
     </div>
     <div class="col-3">
       <label for="rep_kilomater">เลขกิโล</label>
@@ -187,7 +214,7 @@ connect();
     <table class="table table-hover table-bordered" id="myTable">
       <thead class="thead-dark">
         <tr align="center">
-          <th width="5%">รายการที่</th>
+          <th width="5%">รายการ</th>
           <th width="45%">บริการ</th>
           <th width= "10%">จำนวน</th>
           <th width="25%">ผู้ซ่อม</th>
@@ -209,7 +236,7 @@ connect();
     <table class="table table-hover table-bordered" id="myTable2">
       <thead class="thead-dark">
         <tr align="center">
-          <th width="5%">รายการที่</th>
+          <th width="5%">รายการ</th>
           <th width="65%">อะไหล่</th>
           <th width= "10%">จำนวน</th>
         </tr>

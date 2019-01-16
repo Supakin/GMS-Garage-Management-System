@@ -41,8 +41,6 @@ connect();
       กลับก่อนหน้า
     </button>
   </div>
-  <form  action="cf.repairslip.newcus.php" method="post">
-
   <div class="row mt-3 mb-3 align-items-center">
     <div class="col-1">
         <i class="fas fa-wrench" style='font-size:65px;color:black'></i>
@@ -51,22 +49,23 @@ connect();
       <h1>กรุณาเลือกลูกค้า</h1>
     </div>
   </div>
-  <div class="row mt-5">
-    <form  action="repairslip.oldcus.php" method="post">
-      <div class="col-4">
-        <label for="cus_id">รหัสลูกค้า : </label>
-        <input class="form-control" type="text" minlength="13" maxlength="13" name="cus_id" required>
-      </div>
-      <div class="col-4">
-        <label for="car_license">ทะเบียนรถ : </label>
-        <input class="form-control" type="text"  name="car_license" >
-      </div>
-      <div class="col-4">
-        <label for="car_province">รหัสลูกค้า : </label>
-        <input class="form-control" type="text" name="car_province" >
-      </div>
-    </form>
+  <form  action="repairslip.oldcus.php" method="post">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-3">
+      <label for="cus_id">รหัสลูกค้า : </label>
+      <input class="form-control" type="text" minlength="13" maxlength="13" name="cus_id" required>
+    </div>
+    <div class="col-3">
+      <label for="car_license">ทะเบียนรถ : </label>
+      <input class="form-control" type="text"  name="car_license" >
+    </div>
+    <div class="col-2">
+      <label for=""><small class="text-white">TEST</small></label>
+      <button type="submit" name="save" class="btn btn-success btn-block shadow-sm">ยืนยัน</button>
+    </div>
   </div>
+  </form>
+</div>
 
 </body>
 </html>

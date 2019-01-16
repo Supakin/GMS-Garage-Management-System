@@ -276,7 +276,7 @@
       echo "<meta http-equiv ='refresh'content='0;URL=service.php'>";
     }
 
-    //INSERT data of repairslip to CUSTOMER,CAR,REPAIRSLIP,SERVICE_DETAIL,REQUISITION TABLE
+    //INSERT data of repairslip to CUSTOMER,CAR,REPAIRSLIP,SERVICE_DETAIL,REQUISITION TABLE ---- NEW CUSTOMER
     if(isset($_POST['action']) && $_POST['action']=='addrepairslip_newcus'){
       $rep_id = $_POST['rep_id'];
       $cus_id = $_POST['cus_id'];
@@ -315,6 +315,89 @@
       //INSERT data of Car to CARS TABLE
       $ins_car_sql = "INSERT INTO CARS VALUES (\"$car_vin\",\"$car_engine\",\"$car_license\",\"$cus_id\",\"$car_province\",\"$car_brand\",\"$car_model\",\"$car_color\")";
       $ins_car_query = mysql_query($ins_car_sql) or die(mysql_error());
+
+      //INSERT data of Repairslip to REPAIRSLIP
+      $ins_rep_sql = "INSERT INTO REPAIRSLIP(REP_ID,CUS_ID,CAR_VIN,EMP_ID,REP_DATE,REP_DATE_GETCAR,REP_TOTALCOST,REP_DETAIL,REP_KILOMATER,REP_REPAIRSTATUS,REP_PAYMENTSTATUS,REP_NETTOTALCOST) VALUES (\"$rep_id\",\"$cus_id\",\"$car_vin\",\"$empleader\",\"$date\",\"$getdate\",$totalcost,\"$rep_detail\",\"$rep_kilomater\",'N','N',$nettotalcost)";
+      $ins_rep_query = mysql_query($ins_rep_sql) or die(mysql_error());
+
+      //INSERT data of Service detail of SERVICE_DETAIL TABLE
+      for($i=0;$i<count($service);$i++){
+        //CREATE PK for SERD
+        $sqlid = "SELECT MAX(SERD_NUMBER) FROM SERVICE_DETAIL";
+        $sqlid_query = mysql_query($sqlid);
+        $serd_number = (int)mysql_result($sqlid_query,0,0);
+        $serd_number += 1;
+
+        $ins_sed_sql = "INSERT INTO SERVICE_DETAIL VALUES ($serd_number,\"$service[$i]\",\"$employee[$i]\",$seramount[$i],\"$rep_id\",$sertotalcost[$i])";
+        $ins_sed_query = mysql_query($ins_sed_sql) or die(mysql_error());
+      }
+
+      //INSERT data of Requisition product of REQUISITION TABLE
+      for($i=0;$i<count($product);$i++){
+        //CREATE PK for REQ
+        $sqlid = "SELECT MAX(REQ_NUMBER) FROM REQUISITION";
+        $sqlid_query = mysql_query($sqlid);
+        $req_number = (int)mysql_result($sqlid_query,0,0);
+        $req_number += 1;
+
+        $ins_req_sql = "INSERT INTO REQUISITION VALUES ($req_number,\"$rep_id\",\"$product[$i]\",$proamount[$i],$prototalcost[$i])";
+        $ins_req_query = mysql_query($ins_req_sql) or die(mysql_error());
+      }
+
+      echo "<script type='text/javascript'>alert('เพิ่ม ".$rep_id." เรียบร้อยแล้วค่ะ');</script>" ;
+      echo "<meta http-equiv ='refresh'content='0;URL=main_service.php'>";
+    }
+
+    //INSERT and UPDATE data of repairslip to CUSTOMER,CAR,REPAIRSLIP,SERVICE_DETAIL,REQUISITION TABLE ---- OLD CUSTOMER
+    if(isset($_POST['action']) && $_POST['action']=='addrepairslip_oldcus'){
+      $rep_id = $_POST['rep_id'];
+      $cus_id = $_POST['cus_id'];
+      $cus_fname = $_POST['cus_fname'];
+      $cus_lname = $_POST['cus_lname'];
+      $cus_tel = $_POST['cus_tel'];
+      $cus_address = $_POST['cus_address'];
+      $date = $_POST['date'];
+      $getdate = $_POST['getdate'];
+      $car_license = $_POST['car_license'];
+      $car_province = $_POST['car_province'];
+      $car_brand = $_POST['car_brand'];
+      $car_model = $_POST['car_model'];
+      $car_color = $_POST['car_color'];
+      $car_engine = $_POST['car_engine'];
+      $car_vin = $_POST['car_vin'];
+      $rep_kilomater = $_POST['rep_kilomater'];
+      $rep_detail  = $_POST['rep_detail'];
+      $empleader = $_POST['empleader'];
+      $service = $_POST['service'];
+      $seramount = $_POST['seramount'];
+      $employee = $_POST['employee'];
+      $product = $_POST['product'];
+      $proamount = $_POST['proamount'];
+      $sertotalcost = $_POST['sertotalcost'];
+      $prototalcost = $_POST['prototalcost'];
+      $totalcostservice = $_POST['totalcostservice'];
+      $totalcostproduct = $_POST['totalcostproduct'];
+      $totalcost = $_POST['totalcost'];
+      $nettotalcost = $_POST['nettotalcost'];
+
+      //UPDATE data of Customer to CUSTOMER TABLE
+      if($_POST['updCustomer']=='updCustomer'){
+        $upd_cus_sql = "UPDATE CUSTOMER SET CUS_FNAME = \"$cus_fname\", CUS_LNAME = \"$cus_lname\", CUS_TEL = \"$cus_tel\" , CUS_ADDRESS = \"$cus_address\"  WHERE CUS_ID = \"$cus_id\"";
+        $upd_cus_query = mysql_query($upd_cus_sql) or die(mysql_error());
+      }
+
+      //INSERT data of Car to CARS TABLE
+      if($_POST['checknewcar']=='new'){
+        $ins_car_sql = "INSERT INTO CARS VALUES (\"$car_vin\",\"$car_engine\",\"$car_license\",\"$cus_id\",\"$car_province\",\"$car_brand\",\"$car_model\",\"$car_color\")";
+        $ins_car_query = mysql_query($ins_car_sql) or die(mysql_error());
+      }else{
+        //UPDATE data of Car to CARS TABLE
+        if($_POST['updCars']=='updCars'){
+          $upd_car_sql = "UPDATE CARS SET CAR_PROVINCE = \"$car_province\", CAR_MODEL = \"$car_model\" ,CAR_BRAND = \"$car_brand\", CAR_COLOR = \"$car_color\" ,CAR_ENGINE_ID = \"$car_engine\" WHERE CAR_LICENSE = \"$car_license\" AND CAR_VIN = \"$car_vin\"";
+          $upd_car_query = mysql_query($upd_car_sql) or die(mysql_error());
+        }
+
+      }
 
       //INSERT data of Repairslip to REPAIRSLIP
       $ins_rep_sql = "INSERT INTO REPAIRSLIP(REP_ID,CUS_ID,CAR_VIN,EMP_ID,REP_DATE,REP_DATE_GETCAR,REP_TOTALCOST,REP_DETAIL,REP_KILOMATER,REP_REPAIRSTATUS,REP_PAYMENTSTATUS,REP_NETTOTALCOST) VALUES (\"$rep_id\",\"$cus_id\",\"$car_vin\",\"$empleader\",\"$date\",\"$getdate\",$totalcost,\"$rep_detail\",\"$rep_kilomater\",'N','N',$nettotalcost)";
