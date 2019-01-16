@@ -97,7 +97,7 @@ html {overflow-y: scroll;}
       </button>
     </div>
     <div class="col-1.5">
-      <button type="button" class="btn btn-success  m-1" onClick = "window.location.replace('repairslip.oldcus.php')">
+      <button type="button" class="btn btn-success  m-1" onClick = "window.location.replace('repairslip.getcustomer.php')">
         <i class='fas fa-plus' style='font-size:10px;color:white'></i>
         สำหรับลูกค้าที่เคยใช้บริการ
       </button>
@@ -150,7 +150,44 @@ html {overflow-y: scroll;}
 
             <div id="<?php echo "show".$row['REP_ID']."repairslip"; ?>" class="collapse" data-parent="#accordion1">
               <div class="card-body">
-                <div class="row mt-3 mb-1">
+                <div class="row mt-2 mb-2 justify-content-end">
+                  <div class="col-1.5">
+                    สถานะการซ่อม :
+                  </div>
+                  <div class="col-2">
+                    <?php
+                    if ($row['REP_REPAIRSTATUS']=='Y' ){
+                      echo "<span class='badge badge-success '>";
+                      echo "ซ่อมเรียบร้อย";
+                      echo "</span>";
+                    }else{
+                      echo "<span class='badge badge-danger'>";
+                      echo "อยู่ระหว่างการซ่อม";
+                      echo "</span>";
+                    }
+                    ?>
+                  </div>
+                </div>
+                <div class="row mt-2 mb-4 justify-content-end">
+                  <div class="col-1.5">
+                    สถานการชำระเงิน :
+                  </div>
+                  <div class="col-2">
+                    <?php
+                    if ($row['REP_PAYMENTSTATUS']=='Y' ){
+                      echo "<span class='badge badge-success '>";
+                      echo "ชำระเงินแล้ว";
+                      echo "</span>";
+                    }else{
+                      echo "<span class='badge badge-danger'>";
+                      echo "ยังไม่ชำระเงิน";
+                      echo "</span>";
+                    }
+                    ?>
+
+                  </div>
+                </div>
+                <div class="row mt-4 mb-1">
                   <div class="col-8">
                     <label><h5>ข้อมูลลูกค้า</h5></label>
                   </div>
@@ -419,13 +456,24 @@ html {overflow-y: scroll;}
                         <small>บาท</small>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-9">
+                    <?php if ($row['REP_REPAIRSTATUS']=='N' ){ ?>
+                      <div class="row mt-2 mb-2">
+                        <div class="col-8">
+                          <button class="btn btn-success btn-block" data-toggle = "modal" data-target="#cfRepair" data-id="<?php echo $row['REP_ID'] ?>" data-fname="<?php echo $row['CUS_FNAME'] ?>" data-lname="<?php echo $row['CUS_LNAME'] ?>"  data-car="<?php echo $row['CAR_LICENSE'] ?>" data-province="<?php echo $row['CAR_PROVINCE'] ?>" >
+                            ยืนยันการซ่อม
+                          </button>
+                        </div>
+                      </div>
+                    <?php } ?>
+                  <?php if ($row['REP_PAYMENTSTATUS']=='N' ){ ?>
+                    <div class="row mt-2 mb-2">
+                      <div class="col-8">
                         <button class="btn btn-success btn-block" data-toggle = "modal" data-target="#cfPayment" data-id="<?php echo $row['REP_ID'] ?>" data-fname="<?php echo $row['CUS_FNAME'] ?>" data-lname="<?php echo $row['CUS_LNAME'] ?>"  data-car="<?php echo $row['CAR_LICENSE'] ?>" data-province="<?php echo $row['CAR_PROVINCE'] ?>" data-ntotalcost="<?php echo $row['REP_NETTOTALCOST'] ?>">
                           ยืนยันการชำระเงิน
                         </button>
                       </div>
                     </div>
+                  <?php } ?>
                   </div>
                 </div>
               </div>
@@ -791,11 +839,11 @@ html {overflow-y: scroll;}
             <div class="col-6">
               <div class="form-group">
                 <label for="repid">รหัสการซ่อม : </label>
-                <input  class ="form-control" type="text" name="repid" id="repid" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+                <input  class ="form-control" type="text" name="rep_id" id="repid" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
               </div>
               <div class="form-group">
                 <label for="repid">ลูกค้า : </label>
-                <input  class ="form-control" type="text" name="cusname" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+                <input  class ="form-control" type="text" name="cus_name" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
               </div>
               <div class="form-group">
                 <label for="repid">ทะเบียนรถ : </label>
@@ -811,6 +859,55 @@ html {overflow-y: scroll;}
                 <div class="row mb-3"></div>
                 <i class='fab fa-bitcoin' style='font-size:200px;color:green'></i>
 
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+          <button name="save" type="submit" class="btn btn-success" id="submit" >บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!--cf.Rpairing Repairslip-->
+<form  method="post" action="update.data.php">
+  <div class="modal fade" id="cfRepair">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header align-items-center">
+          <i class='fas fa-wrench m-1' style='font-size:35px;color:green'></i>
+          <h4 class="modal-title" align="center">ยืนยันการซ่อม</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input type="hidden" name="action" value="updateREP_REPAIRSTATUS">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="repid">รหัสการซ่อม : </label>
+                <input  class ="form-control" type="text" name="rep_id" id="repid" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              <div class="form-group">
+                <label for="repid">ลูกค้า : </label>
+                <input  class ="form-control" type="text" name="cus_name" id="cusname" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+              <div class="form-group">
+                <label for="repid">ทะเบียนรถ : </label>
+                <input  class ="form-control" type="text" name="cars" id="cars" value="" style="border:none; font-weight: bold; background-color: white;" readonly>
+              </div>
+            </div>
+            <div class="col align-items-center">
+                <div class="row mb-3"></div>
+                <i class='fas fa-wrench' style='font-size:200px;color:green'></i>
             </div>
           </div>
 
@@ -853,6 +950,17 @@ $(document).ready(function() {
     modal.find('#cusname').val(name);
     modal.find('#cars').val(cars);
     modal.find('#netcost').val(netcost);
+  });
+
+  $('#cfRepair').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id= button.data('id');
+    var name = button.data('fname')+"  "+button.data('lname');
+    var cars = button.data('car')+"  "+button.data('province');
+    var modal = $(this);
+    modal.find('#repid').val(id);
+    modal.find('#cusname').val(name);
+    modal.find('#cars').val(cars);
   });
 });
 
