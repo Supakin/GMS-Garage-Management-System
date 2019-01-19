@@ -1,33 +1,35 @@
 <?php
   require_once('GMSdb/connect.inc.php');
   connect();
-    $gpco_id = $_POST['gpco_id'];
-    $ord_id = $_POST['ord_id'];
-    $clo_id = $_POST['clo_id'];
-    $sel_id = $_POST['sel_id'];
-    $sel_name = $_POST['sel_name'];
-    $clo_date = $_POST['clo_date'];
-    $clo_getdate = $_POST['clo_getdate'];
+    $clb_id = $_POST['clb_id'];
+    $buy_id = $_POST['buy_id'];
     $date = $_POST['date'];
-    $p =  $_POST['product'];
+    $getdate = $_POST['getdate'];
+    $p = $_POST['product'];
     $pn = $_POST['productname'];
-    $ca = $_POST['claimamount'];
-    $ga = $_POST['gotamount'];
-    $a = $_POST['getamount'];
+    $ba = $_POST['buyamount'];
+    $a = $_POST['amount'];
+    $d = $_POST['descript'];
     $product = array();
     $productname = array();
-    $claimamount = array();
-    $gotamount = array();
-    $getamount = array();
+    $buyamount = array();
+    $amount = array();
+    $descript = array();
+
+    $sql = "SELECT * FROM BUYSLIP WHERE BUY_ID = $buy_id ";
+    $sql_query =  mysql_query($sql) or die(mysql_error());
+    $result = mysql_fetch_array($sql_query);
+
     for($i=0;$i<count($p);$i++){
       if($a[$i]!=null && $a[$i]!=0){
         $product[] = $p[$i];
         $productname[] = $pn[$i];
-        $claimamount[] = $ca[$i];
-        $gotamount[] = $ga[$i];
-        $getamount[] = $a[$i];
+        $buyamount[] = $ba[$i];
+        $amount[] = $a[$i];
+        $descript[] = $d[$i];
       }
     }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -64,77 +66,54 @@
 <div class="container">
   <div class="row justify-content-center align-content-center">
     <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick =" window.history.go(-1)">
-      <i class='fas fa-truck' style='font-size:10px;color:white'></i>
-      กลับไปแก้ไขข้อมูลการรับเคลมอะไหล่
+      <i class='fas fa-ambulance' style='font-size:10px;color:white'></i>
+      กลับไปแก้ไขข้อมูลการเคลมอะไหล่
     </button>
   </div>
   <form  action="insert.data.php" method="post" >
-  <input type="hidden" name="action" value="addgetclaimorder">
+  <input type="hidden" name="action" value="addclaimbuyslip">
   <div class="row mt-3 mb-3 align-items-center">
     <div class="col-1">
-      <i class="fas fa-truck" style='font-size:65px;color:black'></i>
+      <i class="fas fa-ambulance" style='font-size:65px;color:black'></i>
     </div>
     <div class="col-11">
-      <h3>รหัสการรับเคลม : <?php echo $gpco_id ?></h3>
-      <input type="hidden" name="gpco_id"  value="<?php echo $gpco_id?>">
+      <h3>รหัสการเคลมจากลูกค้า : <?php echo $clb_id ?></h3>
+      <input type="hidden" name="clb_id"  value="<?php echo $clb_id?>">
     </div>
   </div>
   <div class="row justify-content-end  m-1">
     <div class="col-2 ">
-      รหัสการเคลม :
+      เลขที่ใบเสร็จ :
     </div>
     <div class="col-3">
-      <?php echo $clo_id?>
-      <input type="hidden" name="clo_id"  value="<?php echo $clo_id ?>">
+      <?php echo $buy_id ?>
+      <input type="hidden" name="buy_id"  value="<?php echo $buy_id?>">
     </div>
   </div>
   <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      รหัสใบนำเข้าอะไหล่ :
+    <div class="col-2">
+      วันที่ซื้อ :
     </div>
     <div class="col-3">
-      <?php echo $ord_id ?>
+      <?php  echo $result['BUY_DATE'] ?>
     </div>
   </div>
   <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      รหัสผู้ขาย :
+    <div class="col-2">
+      วันที่เคลม :
     </div>
     <div class="col-3">
-      <?php echo $sel_id ?>
+      <?php  echo $date; ?>
+      <input type="hidden" name="date" value="<?php echo $date; ?>">
     </div>
   </div>
   <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      ชื่อผู้ขาย :
+    <div class="col-2">
+      กำหนดวันได้รับ :
     </div>
     <div class="col-3">
-      <?php echo $sel_name?>
-    </div>
-  </div>
-  <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-    วันที่เคลม :
-    </div>
-    <div class="col-3">
-      <?php echo $clo_date ?>
-    </div>
-  </div>
-  <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      กำหนดวันที่ได้รับ :
-    </div>
-    <div class="col-3">
-      <?php echo $clo_getdate ?>
-    </div>
-  </div>
-  <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      วันที่ได้รับ :
-    </div>
-    <div class="col-3">
-      <?php echo $date ?>
-      <input type="hidden" name="date"  value="<?php echo $date ?>">
+      <?php  echo $getdate; ?>
+      <input type="hidden" name="getdate" value="<?php echo $getdate; ?>">
     </div>
   </div>
   <br>
@@ -143,14 +122,13 @@
       <thead class="thead-dark">
         <tr align="center">
           <th>รายการที่</th>
-          <th>รหัสสินค้า</th>
-          <th>ชื่อสินค้า</th>
+          <th>รหัส</th>
+          <th>ชื่อ</th>
+          <th>จำนวนที่ซื้อ</th>
           <th>จำนวนที่เคลม</th>
-          <th>รับแล้ว</th>
-          <th>จำนวนที่กำลังรับ</th>
+          <th>หมายเหตุ</th>
         </tr>
       </thead>
-
       <?php
         for($i=0;$i<count($product);$i++){
       ?>
@@ -166,15 +144,16 @@
               <?php echo $productname[$i] ?>
             </td>
             <td align="center">
-              <?php echo $claimamount[$i] ?>
+              <?php echo $buyamount[$i] ?>
             </td>
             <td align="center">
-              <?php echo $gotamount[$i] ?>
+              <?php echo $amount[$i] ?>
+              <input type="hidden" name="amount[]" value="<?php echo $amount[$i] ?>">
             </td>
             <td align="center">
-              <?php echo $getamount[$i] ?>
-              <input type="hidden" name="getamount[]" value="<?php echo $getamount[$i] ?>">
-            </td>
+              <?php echo $descript[$i] ?>
+              <input type="hidden" name="descript[]" value="<?php echo $descript[$i] ?>">
+               </td>
           </tr>
       <?php
       }
@@ -189,6 +168,7 @@
     </div>
   </form>
   </div>
+</div>
 </body>
 </html>
 <?php

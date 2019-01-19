@@ -432,6 +432,205 @@
     }
 
 
+      //INSERT data of ORDERS to ORDERS and ORDER_DETAIL
+      if(isset($_POST['action'])&&$_POST['action']=='addinjury'){
+        $sql = "SELECT MAX(INJ_ID) FROM INJURY";
+        $sql_query = mysql_query($sql);
+        $inj_id = (int)mysql_result($sql_query,0,0);
+        $inj_id += 1;
+        $inj_id = str_pad($inj_id, 10, "0", STR_PAD_LEFT);
+        $product = $_POST['product'];
+        $amount = $_POST['amount'];
+        $rep_id = $_POST['rep_id'];
+        $emp_id = $_POST['emp_id'];
+        $inj_description = $_POST['inj_description'];
+        $pro_sql = "SELECT PRO_BUYPRICE FROM PRODUCT WHERE PRO_ID = \"$product\"";
+        $pro_query = mysql_query($pro_sql) or die(mysql_error());
+        $buyprice = mysql_fetch_array($pro_query);
+        $cost = $buyprice['PRO_BUYPRICE']*$amount;
+        $sql = "INSERT INTO INJURY VALUES (\"$inj_id\",\"$product\",\"$emp_id\",\"$inj_description\",\"$amount\",$cost,\"$rep_id\",CURDATE())";
+        $sql_query = mysql_query($sql) or die(mysql_error());
+
+        //UPDATE  wamount to PRODUCT TABLE
+        $sel_pro_sql = "SELECT PRO_WAMOUNT FROM PRODUCT WHERE PRO_ID = \"$product\"";
+        $sel_pro_query = mysql_query($sel_pro_sql) or die(mysql_error());
+        $result =  mysql_fetch_array($sel_pro_query);
+        $wamount = $result['PRO_WAMOUNT']+$amount;
+
+        $upd_wamount_sql = "UPDATE PRODUCT SET PRO_WAMOUNT = \"$wamount\" WHERE PRO_ID = \"$product\"";
+        $upd_wamount_query = mysql_query($upd_wamount_sql) or die(mysql_error());
+
+        echo "<script type='text/javascript'>alert('เพิ่มรหัสชำรุด : ".$inj_id." เรียบร้อยแล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=injury.php'>";
+      }
+
+      //INSERT data of buyslip to BUYSLIP and BUYSLIP_DETAIL TABLE
+      if(isset($_POST['action'])&&$_POST['action']=='addbuyslip'){
+        $buy_id = $_POST['buy_id'];
+        $product = $_POST['product'];
+        $amount = $_POST['amount'];
+        $price = $_POST['price'];
+        $totalprice = $_POST['totalprice'];
+
+        //INSERT data of Buyslip
+        $ins_buy_sql = "INSERT INTO BUYSLIP VALUES (\"$buy_id\",CURDATE(),\"$totalprice\")";
+        $ins_buy_query = mysql_query($ins_buy_sql) or die(mysql_error());
+
+        //INSERT data of BUYSLIP_DETAIL
+        for($i=0;$i<count($product);$i++){
+          $sqlid = "SELECT MAX(BUYD_NUMBER) FROM BUYSLIP_DETAIL";
+          $sqlid_query = mysql_query($sqlid);
+          $buyd_id = (int)mysql_result($sqlid_query,0,0);
+          $buyd_id += 1;
+
+          $ins_buyd_sql = "INSERT INTO BUYSLIP_DETAIL VALUES ($buyd_id,\"$buy_id\",\"$product[$i]\",\"$amount[$i]\",$price[$i])";
+          $ins_buyd_query = mysql_query($ins_buyd_sql) or die(mysql_error());
+
+          //UPDATE  amount to PRODUCT TABLE
+          $sel_pro_sql = "SELECT PRO_AMOUNT FROM PRODUCT WHERE PRO_ID = \"$product[$i]\"";
+          $sel_pro_query = mysql_query($sel_pro_sql) or die(mysql_error());
+          $result =  mysql_fetch_array($sel_pro_query);
+          $newamount = $result['PRO_AMOUNT']-$amount[$i];
+
+          $upd_amount_sql = "UPDATE PRODUCT SET PRO_AMOUNT = \"$newamount\" WHERE PRO_ID = \"$product[$i]\"";
+          $upd_amount_query = mysql_query($upd_amount_sql) or die(mysql_error());
+
+        }
+
+        echo "<script type='text/javascript'>alert('เพิ่มสลิปการขาย : ".$buy_id." เรียบร้อยแล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=main_buy.php'>";
+      }
+
+      //INSERT data of takedayoff to TAKEDAYOFF TABLE
+      if(isset($_POST['action'])&&$_POST['action']=='addtakedayoff'){
+        $sql = "SELECT MAX(TAK_ID) FROM TAKEDAYOFF";
+        $sql_query = mysql_query($sql);
+        $tak_id = (int)mysql_result($sql_query,0,0);
+        $tak_id += 1;
+        $tak_id = str_pad($tak_id, 10, "0", STR_PAD_LEFT);
+        $emp_id = $_POST['emp_id'];
+        $datebegin = $_POST['datebegin'];
+        $dateend = $_POST['dateend'];
+        $descript = $_POST['descript'];
+
+        $ins_tak_sql = "INSERT INTO TAKEDATOFF VALUES (\"$tak_id\",\"$emp_id\",\"$datebegin\",\"$dateend\",\"$descript\")";
+        $ins_tak_query = mysql_query($ins_tak_sql) or die(mysql_error());
+
+        echo "<script type='text/javascript'>alert('เพิ่มการลาที่ : ".$tak_id." เรียบร้อยแล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=main_buy.php'>";
+      }
+
+      //INSERT data of CLAIM BUY to CLAIMSLIP_BUY and CLAIM_BUY_DETAIL
+      if(isset($_POST['action'])&&$_POST['action']=='addclaimbuyslip'){
+        $clb_id = $_POST['clb_id'];
+        $buy_id = $_POST['buy_id'];
+        $date = $_POST['date'];
+        $getdate = $_POST['getdate'];
+        $product =$_POST['product'];
+        $amount = $_POST['amount'];
+        $descript = $_POST['descript'];
+
+        $sql = "INSERT INTO CLAIMSLIP_BUY  VALUES (\"$clb_id\",\"$buy_id\",\"$date\",\"$getdate\",'N')";
+        $sql_query = mysql_query($sql) or die(mysql_error());
+
+        foreach ($product as $key => $value) {
+          $sqlid = "SELECT MAX(CLBD_NUMBER) FROM CLAIM_BUY_DETAIL";
+          $sqlid_query = mysql_query($sqlid);
+          $clbd_id = (int)mysql_result($sqlid_query,0,0);
+          $clbd_id += 1;
+
+          $sql2 = "SELECT BUYD_NUMBER FROM BUYSLIP NATURAL JOIN BUYSLIP_DETAIL WHERE BUY_ID =\"$buy_id\" AND PRO_ID = \"$value\"";
+          $sql2_query = mysql_query($sql2) or die(mysql_error());
+          $buydnum = mysql_fetch_array($sql2_query);
+
+          $sql = "INSERT INTO CLAIM_BUY_DETAIL VALUES ($clbd_id,\"$value\",\"$clb_id\",'".$buydnum['BUYD_NUMBER']."',\"$amount[$key]\",\"$descript[$key]\",'N')";
+          $sql_query = mysql_query($sql)  or die(mysql_error());
+
+          //UPDATE amount on PRODUCT table
+          $set_pro_sql = "SELECT PRO_WAMOUNT FROM PRODUCT WHERE PRO_ID = \"$value\"";
+          $set_pro_query = mysql_query($set_pro_sql) or die(mysql_error());
+          $set_pro = mysql_fetch_array($set_pro_query);
+          $newwamount = $set_pro['PRO_WAMOUNT'] + $amount[$key];
+          $upd_pro_sql = "UPDATE PRODUCT SET PRO_WAMOUNT = $newwamount WHERE PRO_ID = \"$value\"";
+          $upd_pro_query = mysql_query($upd_pro_sql) or die(mysql_error());
+        }
+        echo "<script type='text/javascript'>alert('เพิ่ม ".$clb_id." เรียบร้อยแล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=main_buy.php'>";
+      }
+
+      //INSERT data of GET_PRODUCT_CLAIM_ORDER AND GET_PRODUCT_CLAIM_ORDER_DETAIL
+      if(isset($_POST['action'])&&$_POST['action']=='addgetclaimbuy'){
+        $gpcb_id = $_POST['gpcb_id'];
+        $clb_id = $_POST['clb_id'];
+        $date= $_POST['date'];
+        $product =$_POST['product'];
+        $getamount = $_POST['getamount'];
+
+        //INSERT GETCLAIMSLIP to GET_PRODUCT_CLAIM_BUY!!
+        $ins_gpcb_sql = "INSERT INTO GET_PRODUCT_CLAIM_BUY VALUES (\"$gpcb_id\",\"$clb_id\",\"$date\",'N')";
+        $ins_gpcb_query = mysql_query($ins_gpcb_sql) or die(mysql_error());
+
+        //GET_PRODUCT_CLAIM_BUY_DETAIL ....management
+        foreach ($product as $key => $value) {
+          //select claim_buy_datail
+          $set_clbd_sql = "SELECT CLBD_NUMBER, CLBD_AMOUNT FROM CLAIM_BUY_DETAIL WHERE PRO_ID = \"$value\" AND CLB_ID = \"$clb_id\" ORDER BY CLBD_NUMBER";
+          $set_clbd_sql_query = mysql_query($set_clbd_sql) or die(mysql_error());
+          $set_clbd = mysql_fetch_array($set_clbd_sql_query);
+
+          //select sum(getclaimamount) of PRODUCT
+          $set_tamount_gpcbd_sql = "SELECT SUM(GPCBD_GETAMOUNT) AS TOTALAMOUNT FROM GET_PRODUCT_CLAIM_BUY NATURAL JOIN GET_PRODUCT_CLAIM_BUY_DETAIL WHERE CLB_ID = \"$clb_id\" AND PRO_ID = \"$value\"";
+          $set_tamount_gpcbd_query = mysql_query($set_tamount_gpcbd_sql)  or die(mysql_error());
+          $sumamount = mysql_fetch_array($set_tamount_gpcbd_query);
+
+          //update status PRODUCT on CLAIM_ORDER_DETAIL
+          $tamount = 0;
+          if ($sumamount['TOTALAMOUNT']==null){
+            $tamount = 0;
+          }else{
+            $tamount = $sumamount['TOTALAMOUNT'];
+          }
+
+          if($set_clbd['CLBD_AMOUNT']- ($getamount[$key]+$tamount)==0){
+            $upd_clbd_sql= "UPDATE CLAIM_BUY_DETAIL SET CLAD_STATUS='Y' WHERE CLBD_NUMBER= '".$set_clbd['CLBD_NUMBER']."'";
+            $upd_clbd_query = mysql_query($upd_clbd_sql) or die(mysql_query());
+          }
+
+          //GET_PRODUCT_CLAIM_BUY_DETAIL .... make ID
+          $gpcbd_id_sql = "SELECT MAX(GPCBD_NUMBER) FROM GET_PRODUCT_CLAIM_BUY_DETAIL";
+          $gpcbd_id_query = mysql_query($gpcbd_id_sql);
+          $gpcbd_id = (int)mysql_result($gpcbd_id_query,0,0);
+          $gpcbd_id += 1;
+
+          //GET_PRODUCT_CLAIM_BUY_DETAIL .... insert to GET_PRODUCT_CLAIM_BUY_DETAIL table
+          $ins_gpcbd_sql = "INSERT INTO GET_PRODUCT_CLAIM_BUY_DETAIL VALUES (\"$gpcbd_id\",\"$value\",\"$gpcb_id\",'".$set_clbd['CLBD_NUMBER']."',\"$getamount[$key]\")";
+          $ins_gpcbd_query = mysql_query($ins_gpcbd_sql) or die(mysql_error());
+
+          //UPDATE amount on PRODUCT table
+          $set_pro_sql = "SELECT PRO_AMOUNT FROM PRODUCT WHERE PRO_ID = \"$value\"";
+          $set_pro_query = mysql_query($set_pro_sql) or die(mysql_error());
+          $set_pro = mysql_fetch_array($set_pro_query);
+          $newamount = $set_pro['PRO_AMOUNT'] - $getamount[$key];
+          $upd_pro_sql = "UPDATE PRODUCT SET PRO_AMOUNT = $newamount WHERE PRO_ID = \"$value\"";
+          $upd_pro_query = mysql_query($upd_pro_sql) or die(mysql_error());
+        }
+
+        //UPDATE GETCLAIMSLIP .... STATUS!!
+        $gpcb_status;
+        $set_clbd2_sql = "SELECT COUNT(CLBD_STATUS) AS COUNTN FROM CLAIM_BUY_DETAIL WHERE CLB_ID = \"$clb_id\" AND CLAD_STATUS = 'N'";
+        $set_clbd2_sql_query = mysql_query($set_clbd2_sql) or die(mysql_query());
+        $set_clbd2 = mysql_fetch_array($set_clbd2_sql_query);
+
+        if($set_clbd2['COUNTN']==0){
+          $upd_gpcb_sql = "UPDATE GET_PRODUCT_CLAIM_BUY SET GPCB_STATUS = 'Y' WHERE GPCB_ID = \"$gpcb_id\"" ;
+          $upd_gpcb_query = mysql_query($upd_gpcb_sql) or die(mysql_error());
+
+        }
+
+        echo "<script type='text/javascript'>alert('เพิ่ม ".$gpcb_id." เรียบร้อยแล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=main_order.php'>";
+
+      }
+
 
   disconnect();
 ?>

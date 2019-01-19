@@ -45,11 +45,14 @@
     <div class="col-1">
       <i class="fas fa-user" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-7">
+    <div class="col-6">
       <h1>พนักงาน</h1>
     </div>
 
-    <div class="col-4 justify-content-end">
+    <div class="col-5 justify-content-end">
+      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addtakedayoff">
+        <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
+        ลางาน</button>
       <button type="button" class="btn btn-success shadow-sm" onclick='location.replace("main_employee_rolecall.php")'>
         <i class='fas fa-calendar-check' style='font-size:10px;color:white'></i>
         เช็คชื่อ</button>
@@ -208,6 +211,61 @@
                 }
               ?>
             </select>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+          <button name="save" type="submit" class="btn btn-success" id="submit" >ยืนยัน</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<!--takedayoff-->
+<form  method="post" action="insert.data.php">
+  <div class="modal fade" id="addtakedayoff">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">ลางาน</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input type="hidden" name="action" value="addtakedayoff">
+          <div class="form-group">
+            <label for="emp_id">รหัสพนักงาน :</label>
+            <select class="form-control"  id="emp_id" name="emp_id" required>
+              <option value="">กรุณาเลือกพนักงานที่ต้องการแก้ไขข้อมูล</option>
+              <?php
+                $sql = "SELECT EMP_ID,EMP_FNAME,EMP_LNAME FROM EMPLOYEE WHERE EMP_STATUS='Y' ORDER BY EMP_ID";
+                $sql_query = mysql_query($sql) or die(mysql_error());
+                while ($row = mysql_fetch_array($sql_query)){
+              ?>
+                  <option value="<?php echo $row['EMP_ID'] ?>"> <?php echo $row['EMP_ID']." --- ".$row['EMP_FNAME']."  ".$row['EMP_LNAME'] ?></option>
+
+              <?php
+                }
+              ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="emp_id">วันเริ่มลา :</label>
+            <input type="date" name="datebegin" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="emp_id">วันสิ้นสุดการลา :</label>
+            <input type="date" name="dateend" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="emp_id">รายละเอียดการลา :</label>
+            <input type="text" name="descript" class="form-control">
           </div>
         </div>
 

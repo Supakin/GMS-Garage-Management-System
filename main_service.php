@@ -80,10 +80,15 @@ html {overflow-y: scroll;}
     <div class="col-1">
         <i class="fas fa-wrench" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-9">
+    <div class="col-8">
       <h1>บริการซ่อม</h1>
     </div>
-    <div class="col-2">
+    <div class="col-1.5 mr-1">
+      <button type="button" class="btn btn-danger btn-block mt-2  shadow-sm" onClick = "window.location.replace('injury.php')">
+        แจ้งอะไหล่ชำรุด
+      </button>
+    </div>
+    <div class="col-1.5">
       <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('service.php')">
         จัดการบริการ
       </button>

@@ -1,13 +1,11 @@
 <?php
   require_once('GMSdb/connect.inc.php');
   connect();
-    $gpco_id = $_POST['gpco_id'];
-    $ord_id = $_POST['ord_id'];
-    $clo_id = $_POST['clo_id'];
-    $sel_id = $_POST['sel_id'];
-    $sel_name = $_POST['sel_name'];
-    $clo_date = $_POST['clo_date'];
-    $clo_getdate = $_POST['clo_getdate'];
+    $gpcb_id = $_POST['gpcb_id'];
+    $buy_id = $_POST['buy_id'];
+    $clb_id = $_POST['clb_id'];
+    $clb_date = $_POST['clb_date'];
+    $clb_getdate = $_POST['clb_getdate'];
     $date = $_POST['date'];
     $p =  $_POST['product'];
     $pn = $_POST['productname'];
@@ -69,14 +67,14 @@
     </button>
   </div>
   <form  action="insert.data.php" method="post" >
-  <input type="hidden" name="action" value="addgetclaimorder">
+  <input type="hidden" name="action" value="addgetclaimbuy">
   <div class="row mt-3 mb-3 align-items-center">
     <div class="col-1">
       <i class="fas fa-truck" style='font-size:65px;color:black'></i>
     </div>
     <div class="col-11">
-      <h3>รหัสการรับเคลม : <?php echo $gpco_id ?></h3>
-      <input type="hidden" name="gpco_id"  value="<?php echo $gpco_id?>">
+      <h3>รหัสการรับเคลม : <?php echo $gpcb_id ?></h3>
+      <input type="hidden" name="gpcb_id"  value="<?php echo $gpcb_id?>">
     </div>
   </div>
   <div class="row justify-content-end  m-1">
@@ -84,32 +82,16 @@
       รหัสการเคลม :
     </div>
     <div class="col-3">
-      <?php echo $clo_id?>
-      <input type="hidden" name="clo_id"  value="<?php echo $clo_id ?>">
+      <?php echo $clb_id?>
+      <input type="hidden" name="clb_id"  value="<?php echo $clb_id ?>">
     </div>
   </div>
   <div class="row justify-content-end  m-1">
     <div class="col-2 ">
-      รหัสใบนำเข้าอะไหล่ :
+      เลขที่ใบเสร็จ :
     </div>
     <div class="col-3">
-      <?php echo $ord_id ?>
-    </div>
-  </div>
-  <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      รหัสผู้ขาย :
-    </div>
-    <div class="col-3">
-      <?php echo $sel_id ?>
-    </div>
-  </div>
-  <div class="row justify-content-end  m-1">
-    <div class="col-2 ">
-      ชื่อผู้ขาย :
-    </div>
-    <div class="col-3">
-      <?php echo $sel_name?>
+      <?php echo $buy_id ?>
     </div>
   </div>
   <div class="row justify-content-end  m-1">
@@ -117,7 +99,7 @@
     วันที่เคลม :
     </div>
     <div class="col-3">
-      <?php echo $clo_date ?>
+      <?php echo $clb_date ?>
     </div>
   </div>
   <div class="row justify-content-end  m-1">
@@ -125,7 +107,7 @@
       กำหนดวันที่ได้รับ :
     </div>
     <div class="col-3">
-      <?php echo $clo_getdate ?>
+      <?php echo $clb_getdate ?>
     </div>
   </div>
   <div class="row justify-content-end  m-1">
