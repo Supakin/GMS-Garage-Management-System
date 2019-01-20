@@ -26,6 +26,10 @@
             $sql = "UPDATE SCHEDULE SET SCH_FINISHTIME=CURTIME() WHERE SCH_DATE=CURDATE() AND EMP_ID = '$id'";
             $sql_query = mysql_query ($sql);
 
+
+            $upd_amounth_sql = "UPDATE SCHEDULE SET SCH_AMOUNTHOUR = TIMEDIFF(SCH_FINISHTIME,SCH_STARTTIME) WHERE SCH_DATE=CURDATE() AND EMP_ID = '$id'";
+            $upd_amounth_query = mysql_query($upd_amount_sql);
+
             if($sql_query){
               echo "<meta http-equiv ='refresh'content='0;URL=main_employee_rolecall.php'>";
               $_SESSION['post']="";

@@ -45,11 +45,14 @@
     <div class="col-1">
       <i class="fas fa-user" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-6">
+    <div class="col-4">
       <h1>พนักงาน</h1>
     </div>
 
-    <div class="col-5 justify-content-end">
+    <div class="col-7 justify-content-end">
+      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addsalary">
+        <i class='fab fa-bitcoin' style='font-size:10px;color:white'></i>
+        ออกเงินเดือน</button>
       <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addtakedayoff">
         <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
         ลางาน</button>
@@ -266,6 +269,71 @@
           <div class="form-group">
             <label for="emp_id">รายละเอียดการลา :</label>
             <input type="text" name="descript" class="form-control">
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+          <button name="save" type="submit" class="btn btn-success" id="submit" >ยืนยัน</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<!--addSalary-->
+<form  method="post" action="insert.data.php">
+  <div class="modal fade" id="addsalary">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">ออกเงินเดือน</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <?php
+          $date_sql = "SELECT CURDATE(),MONTH(CURDATE()) AS month,YEAR(CURDATE()) AS year ";
+          $date_query = mysql_query($date_sql);
+          $datenow = mysql_fetch_array($date_query);
+
+          $month1 = $datenow['month'];
+          $year1 = $datenow['year'];
+          $month2 = $datenow['month'];
+          $year2 = $datenow['year'];
+          if((int)$month1-1 == 0){
+            $month1 = '12';
+            $year1 = (int)$year1-1;
+          }
+          if(strlen($month1)<2){
+            $month1 = '0'.$month1;
+          }
+          if(strlen($month2)<2){
+            $month2 = '0'.$month2;
+          }
+
+          $datebefore = $year1."-".$month1."-23";
+          $dateafter = $year2."-".$month2."-22";
+
+
+        ?>
+        <div class="modal-body">
+          <input type="hidden" name="action" value="addsalary">
+          <div class="row mt-1 mb-1">
+            <div class="col-5">
+              <label for="date1">ตั้งแต่</label>
+              <input type="date" name="date1"  class="form-control" value="<?php echo $datebefore; ?>" readonly>
+            </div>
+            <div class="col-2 ">
+              <label for="">ถึง</label>
+            </div>
+            <div class="col-5">
+              <label for="dat2">สิ้นสุด</label>
+              <input type="date" name="date2"  class="form-control" value="<?php echo $dateafter; ?>" readonly>
+            </div>
           </div>
         </div>
 

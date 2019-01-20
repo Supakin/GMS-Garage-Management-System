@@ -45,10 +45,10 @@
     <div class="col-1">
         <i class="fab fa-bitcoin" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-7">
+    <div class="col-6">
       <h1>ขายอะไหล่</h1>
     </div>
-    <div class="col-4">
+    <div class="col-5">
       <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#getclaimbuyslip">
         <i class='fas fa-truck' style='font-size:10px;color:white'></i>
         ส่งอะไหล่ให้ลูกค้า

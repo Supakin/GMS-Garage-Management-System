@@ -631,6 +631,40 @@
 
       }
 
+      //INSERT Salary
+      if(isset($_POST['action'])&&$_POST['action']=='addsalary'){
+        $date1 = $_POST['date1'];
+        $date2 = $_POST['date2'];
+        $round = $date1." to ".$date2;
+
+        //check date
+        $sel_date_sql = "SELECT DAY(CURDATE()) AS datenow";
+        $sel_date_query = mysql_query($sel_date_sql);
+        $sel_date = mysql_fetch_array($sel_date_query);
+
+        //check gave salary
+        $sel_sal_sql = "SELECT COUNT(SAL_ID) AS round FROM SALARY WHERE SAL_PAYROUNDDATE = \"$round\"";
+        $sel_sal_query = mysql_query($sel_sal_sql);
+        $sel_sal = mysql_fetch_array($sel_sal_query);
+
+        if($sel_date['datenow'] < 23 || $sel_date['datenow']>28){
+          echo "<script type='text/javascript'>alert('ยังไม่ถึงระยะเวลาการออกเงินเดือนค่ะ ช่วงระยะเวลาออกเงินเดือน คือ วันที่ 22-28 ของทุกเดือน');</script>" ;
+          echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
+        }else if($sel_sal['round']>0){
+          echo "<script type='text/javascript'>alert('ออกเงินเดือนของรอบ '.$round.' แล้วค่ะ');</script>" ;
+          echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
+        }else{
+          $emp_sql = "SELECT EMP_ID FROM EMPLOYEE WHERE EMP_STATUS = 'N'";
+
+        }
+
+
+
+
+
+
+      }
+
 
   disconnect();
 ?>
