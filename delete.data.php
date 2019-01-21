@@ -22,5 +22,25 @@
     echo "<meta http-equiv ='refresh'content='0;URL=injury.php'>";
 
   }
+
+  if(isset($_POST['action']) && $_POST['action']=='delorder'){
+    $ord_id = $_POST['ord_id'];
+
+    //DELETE ORDER_DETAIL
+    $del_ordd_sql = "DELETE FROM ORDER_DETAIL WHERE ORD_ID = \"$ord_id\"";
+    $del_ordd_query = mysql_query($del_ordd_sql) or die(mysql_error());
+
+    //DELETE ORDERS
+    $del_ord_sql = "DELETE FROM ORDERS WHERE ORD_ID = \"$ord_id\"";
+    $del_ord_query = mysql_query($del_ord_sql) or die(mysql_error());
+
+    echo "<script type='text/javascript'>alert('ลบรหัสชำรุด : ".$ord_id." เรียบร้อยแล้วค่ะ');</script>" ;
+    echo "<meta http-equiv ='refresh'content='0;URL=main_order.php'>";
+
+  }
+
+
+
+
   disconnect();
 ?>

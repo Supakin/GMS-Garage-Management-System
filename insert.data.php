@@ -299,10 +299,19 @@
       $service = $_POST['service'];
       $seramount = $_POST['seramount'];
       $employee = $_POST['employee'];
-      $product = $_POST['product'];
-      $proamount = $_POST['proamount'];
+      $product;
+      $proamount;
+      $prototalcost;
+      if(isset($_POST['product'])){
+        $product = $_POST['product'];
+        $proamount = $_POST['proamount'];
+        $prototalcost = $_POST['prototalcost'];
+      }else{
+        $product=null;
+        $proamount= null;
+        $prototalcost = null;
+      }
       $sertotalcost = $_POST['sertotalcost'];
-      $prototalcost = $_POST['prototalcost'];
       $totalcostservice = $_POST['totalcostservice'];
       $totalcostproduct = $_POST['totalcostproduct'];
       $totalcost = $_POST['totalcost'];
@@ -333,15 +342,17 @@
       }
 
       //INSERT data of Requisition product of REQUISITION TABLE
-      for($i=0;$i<count($product);$i++){
-        //CREATE PK for REQ
-        $sqlid = "SELECT MAX(REQ_NUMBER) FROM REQUISITION";
-        $sqlid_query = mysql_query($sqlid);
-        $req_number = (int)mysql_result($sqlid_query,0,0);
-        $req_number += 1;
+      if($product != null){
+        for($i=0;$i<count($product);$i++){
+          //CREATE PK for REQ
+          $sqlid = "SELECT MAX(REQ_NUMBER) FROM REQUISITION";
+          $sqlid_query = mysql_query($sqlid);
+          $req_number = (int)mysql_result($sqlid_query,0,0);
+          $req_number += 1;
 
-        $ins_req_sql = "INSERT INTO REQUISITION VALUES ($req_number,\"$rep_id\",\"$product[$i]\",$proamount[$i],$prototalcost[$i])";
-        $ins_req_query = mysql_query($ins_req_sql) or die(mysql_error());
+          $ins_req_sql = "INSERT INTO REQUISITION VALUES ($req_number,\"$rep_id\",\"$product[$i]\",$proamount[$i],$prototalcost[$i])";
+          $ins_req_query = mysql_query($ins_req_sql) or die(mysql_error());
+        }
       }
 
       echo "<script type='text/javascript'>alert('เพิ่ม ".$rep_id." เรียบร้อยแล้วค่ะ');</script>" ;
@@ -371,10 +382,19 @@
       $service = $_POST['service'];
       $seramount = $_POST['seramount'];
       $employee = $_POST['employee'];
-      $product = $_POST['product'];
-      $proamount = $_POST['proamount'];
+      $product;
+      $proamount;
+      $prototalcost;
+      if(isset($_POST['product'])){
+        $product = $_POST['product'];
+        $proamount = $_POST['proamount'];
+        $prototalcost = $_POST['prototalcost'];
+      }else{
+        $product=null;
+        $proamount= null;
+        $prototalcost = null;
+      }
       $sertotalcost = $_POST['sertotalcost'];
-      $prototalcost = $_POST['prototalcost'];
       $totalcostservice = $_POST['totalcostservice'];
       $totalcostproduct = $_POST['totalcostproduct'];
       $totalcost = $_POST['totalcost'];
@@ -416,23 +436,24 @@
       }
 
       //INSERT data of Requisition product of REQUISITION TABLE
-      for($i=0;$i<count($product);$i++){
-        //CREATE PK for REQ
-        $sqlid = "SELECT MAX(REQ_NUMBER) FROM REQUISITION";
-        $sqlid_query = mysql_query($sqlid);
-        $req_number = (int)mysql_result($sqlid_query,0,0);
-        $req_number += 1;
+      if($product != null){
+        for($i=0;$i<count($product);$i++){
+          //CREATE PK for REQ
+          $sqlid = "SELECT MAX(REQ_NUMBER) FROM REQUISITION";
+          $sqlid_query = mysql_query($sqlid);
+          $req_number = (int)mysql_result($sqlid_query,0,0);
+          $req_number += 1;
 
-        $ins_req_sql = "INSERT INTO REQUISITION VALUES ($req_number,\"$rep_id\",\"$product[$i]\",$proamount[$i],$prototalcost[$i])";
-        $ins_req_query = mysql_query($ins_req_sql) or die(mysql_error());
+          $ins_req_sql = "INSERT INTO REQUISITION VALUES ($req_number,\"$rep_id\",\"$product[$i]\",$proamount[$i],$prototalcost[$i])";
+          $ins_req_query = mysql_query($ins_req_sql) or die(mysql_error());
+        }
       }
-
       echo "<script type='text/javascript'>alert('เพิ่ม ".$rep_id." เรียบร้อยแล้วค่ะ');</script>" ;
       echo "<meta http-equiv ='refresh'content='0;URL=main_service.php'>";
     }
 
 
-      //INSERT data of ORDERS to ORDERS and ORDER_DETAIL
+      //INSERT data of INJURY to INJURY  TABLE
       if(isset($_POST['action'])&&$_POST['action']=='addinjury'){
         $sql = "SELECT MAX(INJ_ID) FROM INJURY";
         $sql_query = mysql_query($sql);
@@ -654,14 +675,57 @@
           echo "<script type='text/javascript'>alert('ออกเงินเดือนของรอบ '.$round.' แล้วค่ะ');</script>" ;
           echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
         }else{
-          $emp_sql = "SELECT EMP_ID FROM EMPLOYEE WHERE EMP_STATUS = 'N'";
+          $emp_sql = "SELECT EMP_ID AS E , EMP_SALARY AS S FROM EMPLOYEE WHERE EMP_STATUS = 'Y'";
+          $emp_query = mysql_query($emp_sql);
+          while($row = mysql_fetch_array($emp_query)){
+            //count rolecall
+            $sel_sch_sql =  "SELECT COUNT(SCH_ID) AS countsch FROM SCHEDULE WHERE EMP_ID = '".$row['E']."' AND SCH_DATE BETWEEN ($date1,$date2)";
+            $sel_sch_query = mysql_query($sel_sch_sql);
+            $sel_sch = mysql_fetch_array($sel_sch_query);
+
+            //count takedayoff
+            $sel_tak_sql = "SELECT SUM(DATEDIFF(day,TAK_DATEBEGIN,TAK_DATEEND)) AS counttak FROM TAKEDATOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN BETWEEN ($date1,$date2) AND TAK_DATEEND BETWEEN ($date1,$date2)";
+            $sel_tak_query = mysql_query($sel_tak_sql);
+            $sel_tak = mysql_fetch_array($sel_tak_query);
+            $daytak = 0;
+            if($sel_tal['counttak']+1 > 2){
+              $daytak = 2;
+            }else{
+              $daytak = $sel_tal['counttak']+1;
+            }
+
+            //day of month
+            $sel_month_sql = "SELECT DATEDIFF(day,$date1,$date2) AS thismonth";
+            $sel_month_query = mysql_query($sel_month_sql);
+            $sel_month = mysql_fetch_array($sel_month_query);
+
+            //sal_fine
+            $fine = 0;
+            $diffday = $sel_month['thismonth']-($sel_sch['countsch']+$daytak+4);
+            if($diffday>0){
+              $fine = $diffday*300;
+            }
+
+            //sal_netsalary
+            $netsalary = $row['S']-$fine;
+
+            //SAL_ID
+            $sql = "SELECT MAX(SAL_ID) FROM SALARY";
+            $sql_query = mysql_query($sql);
+            $sal_id = (int)mysql_result($sql_query,0,0);
+            $sal_id += 1;
+            $sal_id = str_pad($sal_id, 10, "0", STR_PAD_LEFT);
+
+            //INSERT data to Salary
+            $ins_sal_sql = "INSERT INTO SALARY VALUES (\"$sal_id\",'".$row['E']."','".$row['S']."',\"$fine\",\"$netsalary\",CURDATE(),\"$round\")";
+            $ins_sal_query = mysql_query($ins_sal_sql) or die(mysql_error());
+          }
+
+          echo "<script type='text/javascript'>alert('ออกเงินเดือนให้พนักงานทุกท่านแล้วค่ะ');</script>" ;
+          echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
+
 
         }
-
-
-
-
-
 
       }
 

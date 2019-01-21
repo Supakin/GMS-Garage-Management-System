@@ -60,7 +60,7 @@ connect();
     </div>
   </div>
   <div class="row">
-    <table class="table table-hover table-bordered" >
+    <table class="table table-hover table-bordered table-sm" >
       <thead class="thead-dark">
         <tr align="center">
           <th width="15%">รหัส</th>

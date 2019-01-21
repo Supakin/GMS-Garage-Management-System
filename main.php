@@ -31,30 +31,6 @@
 </head>
 <body class="h-100 w-100 pr-3 ">
   <div class="row">
-    <div class="col-3">
-      <div class="container-fuild">
-        <div class="bg-dark text-white p-3 m-1">
-          <h3>dasboard</h3>
-        </div>
-      </div>
-      <div class="container-fuild">
-        <div class="bg-dark text-white p-3 m-1 h-25">
-          <h3>อะไหล่ที่ถูกใช้ไป</h3><br><br>
-        </div>
-        <div class="bg-dark text-white p-3 m-1 h-25">
-          <h3>อะไหล่ที่ถูกใช้ไป</h3><br><br>
-        </div>
-        <div class="bg-dark text-white p-3 m-1 h-25">
-          <h3>อะไหล่ที่ถูกใช้ไป</h3><br><br>
-        </div>
-        <div class="bg-dark text-white p-3 m-1">
-          <h3>อะไหล่ที่ถูกใช้ไป</h3><br><br>
-        </div>
-        <div class="bg-dark text-white p-3 m-1">
-          <h3>อะไหล่ที่ถูกใช้ไป</h3><br><br>
-        </div>
-      </div>
-    </div>
     <div class="col">
       <div class="container-fuild">
         <div class="row  justify-content-center p-2">
@@ -63,7 +39,7 @@
               <tr class="bg-dark text-white">
                 <th scope="row">
                   <center>
-                      <h2>อู่พ่อบิว แง๊นแง๊น</h2>
+                      <h2><b>GMS : GARAGE MANAGEMENT SYSTEM</b></h2>
                   </center>
                 </th>
               </tr>
@@ -115,10 +91,10 @@
               </div>
             </div>
           </button>
-          <button type="button" class="btn btn-success  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_employee.php')">
+          <button type="button" class="btn btn-success  shadow  w-25 mr-4 ml-4 p-1" onClick = "window.location.replace('main_customer.php')">
             <div class="row justify-content-center align-items-center">
               <div class="col p-1">
-                <i class="fas fa-user-alt" style='font-size:80px;color:white'></i>
+                <i class="fas fa-user-circle" style='font-size:80px;color:white'></i>
               </div>
               <div class="col">
                 <h2>ลูกค้า</h2>
@@ -136,6 +112,31 @@
             </div>
           </button>
           </div>
+
+          <div class="row justify-content-center mt-5 mb-5">
+            <button type="button" class="btn btn-primary  shadow  w-25  mr-4 ml-4 p-1" onClick = "window.location.replace('injury.php')">
+              <div class="row justify-content-center align-items-center">
+                <div class="col p-1">
+                  <i class="fas fa-trash-alt" style='font-size:80px;color:white'></i>
+                </div>
+                <div class="col">
+                  <h2>แจ้งอะไหล่ชำรุด</h2>
+                </div>
+              </div>
+            </button>
+            <button type="button" class="btn btn-info  shadow  w-25  mr-4 ml-4 p-1" onClick = "window.location.replace('main_wamount.php')">
+              <div class="row justify-content-center align-items-center">
+                <div class="col p-1">
+                  <i class="fas fa-eraser" style='font-size:80px;color:white'></i>
+                </div>
+                <div class="col">
+                  <h2>กำจัดของเสีย</h2>
+                </div>
+              </div>
+            </button>
+          </div>
+
+
         </div>
       </div>
     </div>

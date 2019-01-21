@@ -22,8 +22,15 @@ connect();
   $service = $_POST['service'];
   $seramount = $_POST['seramount'];
   $employee = $_POST['employee'];
-  $product = $_POST['product'];
-  $proamount = $_POST['proamount'];
+  $product;
+  $proamount;
+  if(isset($_POST['product'])){
+    $product = $_POST['product'];
+    $proamount = $_POST['proamount'];
+  }else{
+    $product=null;
+    $proamount= null;
+  }
   $totalcostservice = 0;
   $totalcostproduct = 0;
 ?>
@@ -236,7 +243,7 @@ connect();
     </div>
   </div>
   <div class="row">
-    <div class="col-6">
+    <?php if($product !=null){ echo "<div class='col-6'>";  }else{ echo "<div class='col-12'>"; }  ?>
       <table class="table table-bordered table-sm" id="myTable">
         <thead>
           <tr align="center">
@@ -273,6 +280,7 @@ connect();
         ?>
       </table>
     </div>
+    <?php if($product != null){ ?>
     <div class="col-6">
       <table class="table table-bordered table-sm" id="myTable">
         <thead>
@@ -307,6 +315,7 @@ connect();
         ?>
       </table>
     </div>
+    <?php } ?>
   </div>
   <div class="row mt-2  justify-content-end">
     <div class="col-5">

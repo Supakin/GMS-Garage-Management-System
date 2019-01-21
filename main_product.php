@@ -61,8 +61,8 @@
     </div>
   </div>
   <div class="row">
-  <table class="table table-hover table-bordered" >
-    <thead class="thead-dark">
+  <table class="table table-hover table-bordered table-sm" >
+    <thead class="thead-dark ">
       <tr align="center">
         <th>รหัส</th>
         <th>รหัสคู่ค้า</th>

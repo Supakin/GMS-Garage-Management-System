@@ -80,15 +80,10 @@ html {overflow-y: scroll;}
     <div class="col-1">
         <i class="fas fa-wrench" style='font-size:65px;color:black'></i>
     </div>
-    <div class="col-8">
+    <div class="col-9">
       <h1>บริการซ่อม</h1>
     </div>
-    <div class="col-1.5 mr-1">
-      <button type="button" class="btn btn-danger btn-block mt-2  shadow-sm" onClick = "window.location.replace('injury.php')">
-        แจ้งอะไหล่ชำรุด
-      </button>
-    </div>
-    <div class="col-1.5">
+    <div class="col-2">
       <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('service.php')">
         จัดการบริการ
       </button>
@@ -122,6 +117,9 @@ html {overflow-y: scroll;}
           $sql = "SELECT * FROM ((REPAIRSLIP NATURAL JOIN CUSTOMER) NATURAL JOIN CARS) NATURAL JOIN EMPLOYEE WHERE REP_REPAIRSTATUS = 'N' OR REP_PAYMENTSTATUS='N' ORDER BY REP_ID ";
           $sql_query = mysql_query($sql);
           while($row = mysql_fetch_array($sql_query)){
+            $sel_req_sql = "SELECT COUNT(REQ_NUMBER) AS CQ  FROM REQUISITION WHERE REP_ID = '".$row['REP_ID']."'";
+            $sel_req_query = mysql_query($sel_req_sql);
+            $sel_req = mysql_fetch_array($sel_req_query);
         ?>
           <div class="card">
             <div class="card-header bg-transparent">
@@ -320,8 +318,7 @@ html {overflow-y: scroll;}
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
-                    <small>
+                  <?php if($sel_req['CQ'] >0){ echo "<div class='col-6'>";  }else{ echo "<div class='col-12'>"; }  ?>
                     <table class="table table-bordered table-sm">
                       <thead>
                         <tr align="center">
@@ -354,6 +351,7 @@ html {overflow-y: scroll;}
                       ?>
                     </table>
                   </div>
+                  <?php if ($sel_req['CQ'] >0) { ?>
                   <div class="col-6">
                     <table class="table table-bordered table-sm" id="myTable">
                       <thead>
@@ -386,8 +384,8 @@ html {overflow-y: scroll;}
                         }
                       ?>
                     </table>
-                  </small>
                   </div>
+                <?php } ?>
                 </div>
 
                 <div class="row mt-2  justify-content-end">
@@ -418,7 +416,7 @@ html {overflow-y: scroll;}
                           $sr_query  = mysql_query($sr_sql);
                           $srresult = mysql_fetch_array($sr_query);
                         ?>
-                        <b class="text-primary"><?php echo  $srresult['SUM(REQ_TOTALPRICE)']  ?></b>
+                        <b class="text-primary"><?php if($sel_req['CQ']>0){ echo $srresult['SUM(REQ_TOTALPRICE)']; }else{ echo 0;  }?></b>
                       </div>
                       <div class="col-4">
                         <small>บาท</small>
@@ -499,6 +497,9 @@ html {overflow-y: scroll;}
           $sql = "SELECT * FROM ((REPAIRSLIP NATURAL JOIN CUSTOMER) NATURAL JOIN CARS) NATURAL JOIN EMPLOYEE WHERE REP_REPAIRSTATUS = 'Y' AND REP_PAYMENTSTATUS='Y' ORDER BY REP_ID ";
           $sql_query = mysql_query($sql);
           while($row = mysql_fetch_array($sql_query)){
+            $sel_req_sql = "SELECT COUNT(REQ_NUMBER) AS CQ  FROM REQUISITION WHERE REP_ID = '".$row['REP_ID']."'";
+            $sel_req_query = mysql_query($sel_req_sql);
+            $sel_req = mysql_fetch_array($sel_req_query);
         ?>
           <div class="card">
             <div class="card-header bg-transparent">
@@ -647,7 +648,7 @@ html {overflow-y: scroll;}
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
+                  <?php if($sel_req['CQ'] >0){ echo "<div class='col-6'>";  }else{ echo "<div class='col-12'>"; }  ?>
                     <table class="table table-bordered table-sm">
                       <thead>
                         <tr align="center">
@@ -680,6 +681,7 @@ html {overflow-y: scroll;}
                       ?>
                     </table>
                   </div>
+                  <?php if($sel_req['CQ']>0){ ?>
                   <div class="col-6">
                     <table class="table table-bordered table-sm" id="myTable">
                       <thead>
@@ -712,6 +714,7 @@ html {overflow-y: scroll;}
                       ?>
                     </table>
                   </div>
+                  <?php } ?>
                 </div>
 
                 <div class="row mt-2  justify-content-end">
@@ -764,7 +767,7 @@ html {overflow-y: scroll;}
                           $sr_query  = mysql_query($sr_sql);
                           $srresult = mysql_fetch_array($sr_query);
                         ?>
-                        <b class="text-primary"><?php echo  $srresult['SUM(REQ_TOTALPRICE)']  ?></b>
+                        <b class="text-primary"><?php if($sel_req['CQ']>0){ echo $srresult['SUM(REQ_TOTALPRICE)']; }else{ echo 0;  }?></b>
                       </div>
                       <div class="col-4">
                         <small>บาท</small>

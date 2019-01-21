@@ -108,6 +108,10 @@ html {overflow-y: scroll;}
       <i class='fas fa-wallet' style='font-size:10px;color:white'></i>
       ชำระเงิน
     </button>
+    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#delorder">
+      <i class='fas fa-trash-alt' style='font-size:10px;color:white'></i>
+      ลบการนำเข้า
+    </button>
   </div>
 
   <div class="tab-example">
@@ -1408,6 +1412,61 @@ html {overflow-y: scroll;}
   </div>
 </div>
 </form>
+
+<!--deleteOrder-->
+<form  method="post" action="delete.data.php">
+  <div class="modal fade" id="delorder">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">ลบการนำเข้า</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input type="hidden" name="action" value="delorder">
+          <div class="form-group">
+            <label for="ord_id">รหัสนำเข้า :</label>
+            <select class="form-control" name="ord_id" required>
+              <option value="">กรุณากรอกรหัสนำเข้า</option>
+              <?php
+                $sql = "SELECT ORD_ID FROM  ORDERS  ";
+                $sql_query = mysql_query($sql) or die(mysql_error());
+                while($row = mysql_fetch_array($sql_query)){
+                  $sql2 = "SELECT PAYO_ID FROM  PAYMENT_ORDER WHERE ORD_ID = '".$row['ORD_ID']."'";
+                  $sql2_query = mysql_query ($sql2) or die(mysql_error());
+                  $row2 = mysql_fetch_array($sql2_query);
+
+                  $sql3 = "SELECT GPO_ID FROM GET_PRODUCT_ORDER WHERE ORD_ID = '".$row['ORD_ID']."'";
+                  $sql3_query = mysql_query($sql3) or die(mysql_error());
+                  $row3 = mysql_fetch_array($sql3_query);
+
+                  if($row2 == null && $row3 ==null){
+              ?>
+                    <option value="<?php echo $row['ORD_ID'] ?>"> <?php echo $row['ORD_ID'] ?></option>
+              <?php
+                  }
+                }
+              ?>
+            </select>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">ปิด</button>
+            <button name="save" type="submit" class="btn btn-success" id="submit" >เลือก</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
 
 
 

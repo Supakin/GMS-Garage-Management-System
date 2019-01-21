@@ -69,14 +69,18 @@
     </div>
   </div>
   <div class="row">
-  <table class="table table-hover table-bordered">
+  <table class="table table-hover table-bordered table-sm">
     <thead class="thead-dark">
       <tr align="center">
-        <th>รหัสพนักงาน</th>
+        <th width="8%">รหัสพนักงาน</th>
         <th>ชื่อ</th>
         <th>นามสกุล</th>
-        <th>เบอร์โทรติดต่อ</th>
-        <th>สถานะ</th>
+        <th width="5%">เพศ</th>
+        <th width="10%">เบอร์โทรติดต่อ</th>
+        <th>ที่อยู่</th>
+        <th width="10%">วันเริ่มงาน</th>
+        <th>เงินเดือน</th>
+        <th width="5%">สถานะ</th>
       </tr>
     </thead>
     <?php
@@ -89,7 +93,19 @@
         <td align="center"> <?php  echo $row["EMP_ID"] ?> </td>
         <td > <?php  echo $row["EMP_FNAME"] ?> </td>
         <td > <?php  echo $row["EMP_LNAME"] ?> </td>
+        <td align="center">
+          <?php
+            if($row['EMP_GENDER']=='M'){
+              echo "ชาย";
+            }else{
+              echo "หญิง";
+            }
+          ?>
+        </td>
         <td align="center"> <?php  echo $row["EMP_TEL"] ?> </td>
+        <td align="center"> <?php  echo $row["EMP_ADDRESS"] ?> </td>
+        <td align="center"> <?php  echo $row["EMP_DATE_BEGINWORK"] ?> </td>
+        <td align="center"> <?php  echo $row["EMP_SALARY"] ?> </td>
         <td align="center">
           <?php
             if ($row["EMP_STATUS"]=='Y'){
@@ -249,6 +265,7 @@
               <?php
                 $sql = "SELECT EMP_ID,EMP_FNAME,EMP_LNAME FROM EMPLOYEE WHERE EMP_STATUS='Y' ORDER BY EMP_ID";
                 $sql_query = mysql_query($sql) or die(mysql_error());
+
                 while ($row = mysql_fetch_array($sql_query)){
               ?>
                   <option value="<?php echo $row['EMP_ID'] ?>"> <?php echo $row['EMP_ID']." --- ".$row['EMP_FNAME']."  ".$row['EMP_LNAME'] ?></option>
