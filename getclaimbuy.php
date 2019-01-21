@@ -42,7 +42,7 @@
         กลับหน้าก่อนหน้า
       </button>
     </div>
-    <form method="post" action="cf.getclaimorder.php">
+    <form method="post" action="cf.getclaimbuy.php">
     <div class="row mt-3 mb-3 align-items-center">
       <div class="col-1">
         <i class="fas fa-truck" style='font-size:65px;color:black'></i>
@@ -70,7 +70,7 @@
       </div>
       <div class="col-3">
         <?php echo $_POST['clb_id'] ?>
-        <input type="hidden" name="clo_id"  value="<?php echo $_POST['clb_id']?>">
+        <input type="hidden" name="clb_id"  value="<?php echo $_POST['clb_id']?>">
       </div>
     </div>
     <div class="row justify-content-end  m-1">

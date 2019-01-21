@@ -87,10 +87,10 @@ html {overflow-y: scroll;}
     <div class="col-4">
       <h1><?php echo $customer['CUS_ID'] ?></h1>
     </div>
+  </div>
+  <div class="row align-items-center">
     <div class="col">
-      <div class="row justify-content-end">
-        <h1><?php echo "คุณ ".$customer['CUS_FNAME']."  ".$customer['CUS_LNAME'] ?></h1>
-      </div>
+      <h1><b class="text-primary"><?php echo "คุณ ".$customer['CUS_FNAME']."  ".$customer['CUS_LNAME'] ?></b></h1>
     </div>
   </div>
   <div class="row mt-3 mb-5 align-items-center">

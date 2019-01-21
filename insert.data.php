@@ -262,6 +262,16 @@
 
       }
 
+      //UPDATE CLO_STATUS on CLAIMSLIP_ORDER
+      $set_gpco_sql = "SELECT COUNT(GPCO_STATUS) FROM GET_PRODUCT_CLAIM_ORDER WHERE CLO_ID = \"$clo_id\" AND GPCO_STATUS = 'Y'";
+      $set_gpco_query = mysql_query($set_gpco_sql) or die(mysql_error());
+      $set_gpco = mysql_fetch_array($set_gpco_query);
+
+      if($set_gpco['COUNT(GPCO_STATUS)']>0){
+        $upd_clo_sql = "UPDATE CLAIMSLIP_ORDER SET CLO_STATUS = 'Y' WHERE CLO_ID = \"$clo_id\"" ;
+        $upd_clo_query = mysql_query($upd_clo_sql) or die(mysql_error());
+      }
+
       echo "<script type='text/javascript'>alert('เพิ่ม ".$gpco_id." เรียบร้อยแล้วค่ะ');</script>" ;
       echo "<meta http-equiv ='refresh'content='0;URL=main_order.php'>";
 
@@ -473,13 +483,14 @@
         $sql_query = mysql_query($sql) or die(mysql_error());
 
         //UPDATE  wamount to PRODUCT TABLE
-        $sel_pro_sql = "SELECT PRO_WAMOUNT FROM PRODUCT WHERE PRO_ID = \"$product\"";
+        $sel_pro_sql = "SELECT PRO_WAMOUNT,PRO_AMOUNT FROM PRODUCT WHERE PRO_ID = \"$product\"";
         $sel_pro_query = mysql_query($sel_pro_sql) or die(mysql_error());
         $result =  mysql_fetch_array($sel_pro_query);
         $wamount = $result['PRO_WAMOUNT']+$amount;
+        $amount = $result['PRO_AMOUNT']-$amount;
 
-        $upd_wamount_sql = "UPDATE PRODUCT SET PRO_WAMOUNT = \"$wamount\" WHERE PRO_ID = \"$product\"";
-        $upd_wamount_query = mysql_query($upd_wamount_sql) or die(mysql_error());
+        $upd_amount_sql = "UPDATE PRODUCT SET PRO_WAMOUNT = \"$wamount\",PRO_AMOUNT = \"$amount\" WHERE PRO_ID = \"$product\"";
+        $upd_amount_query = mysql_query($upd_amount_sql) or die(mysql_error());
 
         echo "<script type='text/javascript'>alert('เพิ่มรหัสชำรุด : ".$inj_id." เรียบร้อยแล้วค่ะ');</script>" ;
         echo "<meta http-equiv ='refresh'content='0;URL=injury.php'>";
@@ -579,7 +590,7 @@
         echo "<meta http-equiv ='refresh'content='0;URL=main_buy.php'>";
       }
 
-      //INSERT data of GET_PRODUCT_CLAIM_ORDER AND GET_PRODUCT_CLAIM_ORDER_DETAIL
+      //INSERT data of GET_PRODUCT_CLAIM_BUY AND GET_PRODUCT_CLAIM_BUY_DETAIL
       if(isset($_POST['action'])&&$_POST['action']=='addgetclaimbuy'){
         $gpcb_id = $_POST['gpcb_id'];
         $clb_id = $_POST['clb_id'];
@@ -603,7 +614,7 @@
           $set_tamount_gpcbd_query = mysql_query($set_tamount_gpcbd_sql)  or die(mysql_error());
           $sumamount = mysql_fetch_array($set_tamount_gpcbd_query);
 
-          //update status PRODUCT on CLAIM_ORDER_DETAIL
+          //update status PRODUCT on CLAIM_BUY_DETAIL
           $tamount = 0;
           if ($sumamount['TOTALAMOUNT']==null){
             $tamount = 0;
@@ -612,8 +623,8 @@
           }
 
           if($set_clbd['CLBD_AMOUNT']- ($getamount[$key]+$tamount)==0){
-            $upd_clbd_sql= "UPDATE CLAIM_BUY_DETAIL SET CLAD_STATUS='Y' WHERE CLBD_NUMBER= '".$set_clbd['CLBD_NUMBER']."'";
-            $upd_clbd_query = mysql_query($upd_clbd_sql) or die(mysql_query());
+            $upd_clbd_sql= "UPDATE CLAIM_BUY_DETAIL SET CLBD_STATUS='Y' WHERE CLBD_NUMBER= '".$set_clbd['CLBD_NUMBER']."'";
+            $upd_clbd_query = mysql_query($upd_clbd_sql) or die(mysql_error());
           }
 
           //GET_PRODUCT_CLAIM_BUY_DETAIL .... make ID
@@ -637,8 +648,8 @@
 
         //UPDATE GETCLAIMSLIP .... STATUS!!
         $gpcb_status;
-        $set_clbd2_sql = "SELECT COUNT(CLBD_STATUS) AS COUNTN FROM CLAIM_BUY_DETAIL WHERE CLB_ID = \"$clb_id\" AND CLAD_STATUS = 'N'";
-        $set_clbd2_sql_query = mysql_query($set_clbd2_sql) or die(mysql_query());
+        $set_clbd2_sql = "SELECT COUNT(CLBD_STATUS) AS COUNTN FROM CLAIM_BUY_DETAIL WHERE CLB_ID = \"$clb_id\" AND CLBD_STATUS = 'N'";
+        $set_clbd2_sql_query = mysql_query($set_clbd2_sql) or die(mysql_error());
         $set_clbd2 = mysql_fetch_array($set_clbd2_sql_query);
 
         if($set_clbd2['COUNTN']==0){
@@ -646,6 +657,17 @@
           $upd_gpcb_query = mysql_query($upd_gpcb_sql) or die(mysql_error());
 
         }
+
+        //UPDATE CLB_STATUS on CLAIMSLIP_BUY
+        $set_gpcb_sql = "SELECT COUNT(GPCB_STATUS) FROM GET_PRODUCT_CLAIM_BUY WHERE CLB_ID = \"$clb_id\" AND GPCB_STATUS = 'Y'";
+        $set_gpcb_query = mysql_query($set_gpcb_sql) or die(mysql_error());
+        $set_gpcb = mysql_fetch_array($set_gpcb_query);
+
+        if($set_gpcb['COUNT(GPCB_STATUS)']>0){
+          $upd_clb_sql = "UPDATE CLAIMSLIP_BUY SET CLB_STATUS = 'Y' WHERE CLB_ID = \"$clb_id\"" ;
+          $upd_clb_query = mysql_query($upd_clb_sql) or die(mysql_error());
+        }
+
 
         echo "<script type='text/javascript'>alert('เพิ่ม ".$gpcb_id." เรียบร้อยแล้วค่ะ');</script>" ;
         echo "<meta http-equiv ='refresh'content='0;URL=main_order.php'>";

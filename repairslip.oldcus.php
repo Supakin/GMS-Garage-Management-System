@@ -55,7 +55,7 @@
   <form  action="cf.repairslip.oldcus.php" method="post">
     <?php
       $newcar = null;
-      if(isset($_POST['car_license'])==null){
+      if($_POST['car_license']==null){
         $newcar = 'new';
       }else{
         $newcar = 'old';

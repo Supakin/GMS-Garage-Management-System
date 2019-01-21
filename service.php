@@ -65,7 +65,7 @@ connect();
         <tr align="center">
           <th width="15%">รหัส</th>
           <th>ชื่อบริการ</th>
-          <th width="30%">ราคาขั้นต่ำ</th>
+          <th width="30%">ราคาค่าช่าง</th>
         </tr>
       </thead>
     <?php

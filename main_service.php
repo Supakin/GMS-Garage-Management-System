@@ -664,14 +664,14 @@ html {overflow-y: scroll;}
                         $rep_id = $row['REP_ID'];
                         $sqlt1 = "SELECT *  FROM (EMPLOYEE NATURAL JOIN SERVICE_DETAIL) NATURAL JOIN SERVICE  WHERE REP_ID = $rep_id";
                         $sqlt1_query = mysql_query($sqlt1) or die(mysql_error());
-                        $i = 1;
+                        $i = 0;
                         while($row2 = mysql_fetch_array($sqlt1_query)){
                       ?>
                           <tr>
                             <td align="center"><?php echo $i+1; ?></td>
                             <td align="center"><?php echo $row2['SER_ID'] ?></td>
                             <td><?php echo $row2['SER_NAME'] ?></td>
-                            <td align="center"<?php echo $row2['SERD_AMOUNT'] ?></td>
+                            <td align="center"><?php echo $row2['SERD_AMOUNT'] ?></td>
                             <td align="center"><?php echo $row2['SERD_COST'] ?></td>
                             <td><?php echo $row2['EMP_FNAME']."  ".$row2['EMP_LNAME'] ?></td>
                           </tr>
@@ -697,14 +697,15 @@ html {overflow-y: scroll;}
                       <?php
                         $sqlt2 = "SELECT * FROM REQUISITION NATURAL JOIN PRODUCT WHERE REP_ID = $rep_id";
                         $sqlt2_query = mysql_query($sqlt2) or die(mysql_error());
-                        $j=1;
+                        $j=0;
                         while($row2 = mysql_fetch_array($sqlt2_query)){
                       ?>
                           <tr>
-                            <td align="center"><?php echo $i+1; ?></td>
+                            <td align="center"><?php echo $j+1; ?></td>
                             <td align="center"><?php echo $row2['PRO_ID'] ?></td>
                             <td><?php echo $row2['PRO_NAME'] ?></td>
-                            <td align="center"<?php echo $row2['REQ_AMOUNT'] ?></td>
+                            <td align="center"><?php echo $row2['PRO_SELLPRICE'] ?></td>
+                            <td align="center"><?php echo $row2['REQ_AMOUNT'] ?></td>
                             <td align="center"><?php echo $row2['REQ_TOTALPRICE'] ?></td>
                           </tr>
 

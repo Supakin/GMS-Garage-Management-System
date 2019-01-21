@@ -63,7 +63,7 @@
   <div class="row justify-content-center align-content-center">
     <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick =" window.history.go(-1)">
       <i class='fas fa-truck' style='font-size:10px;color:white'></i>
-      กลับไปแก้ไขข้อมูลการรับเคลมอะไหล่
+      กลับก่อนหน้า
     </button>
   </div>
   <form  action="insert.data.php" method="post" >
