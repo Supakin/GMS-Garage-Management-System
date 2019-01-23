@@ -545,11 +545,17 @@
         $dateend = $_POST['dateend'];
         $descript = $_POST['descript'];
 
-        $ins_tak_sql = "INSERT INTO TAKEDATOFF VALUES (\"$tak_id\",\"$emp_id\",\"$datebegin\",\"$dateend\",\"$descript\")";
+        $sql = "SELECT DATEDIFF($datebegin,$dateend) AS D";
+        $sql_query = mysql_query($sql);
+        $d = mysql_fetch_array($sql_query);
+        $amount = (int)$d['D']+1;
+
+
+        $ins_tak_sql = "INSERT INTO TAKEDAYOFF VALUES (\"$tak_id\",\"$emp_id\",\"$datebegin\",\"$dateend\",\"$descript\",\"$amount\")";
         $ins_tak_query = mysql_query($ins_tak_sql) or die(mysql_error());
 
         echo "<script type='text/javascript'>alert('เพิ่มการลาที่ : ".$tak_id." เรียบร้อยแล้วค่ะ');</script>" ;
-        echo "<meta http-equiv ='refresh'content='0;URL=main_buy.php'>";
+        echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
       }
 
       //INSERT data of CLAIM BUY to CLAIMSLIP_BUY and CLAIM_BUY_DETAIL
@@ -691,45 +697,32 @@
         $sel_sal = mysql_fetch_array($sel_sal_query);
 
         if($sel_date['datenow'] < 23 || $sel_date['datenow']>28){
-          echo "<script type='text/javascript'>alert('ยังไม่ถึงระยะเวลาการออกเงินเดือนค่ะ ช่วงระยะเวลาออกเงินเดือน คือ วันที่ 22-28 ของทุกเดือน');</script>" ;
+          echo "<script type='text/javascript'>alert('ยังไม่ถึงระยะเวลาการออกเงินเดือนค่ะ ช่วงระยะเวลาออกเงินเดือน คือ วันที่ 23-28 ของทุกเดือน');</script>" ;
           echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
         }else if($sel_sal['round']>0){
-          echo "<script type='text/javascript'>alert('ออกเงินเดือนของรอบ '.$round.' แล้วค่ะ');</script>" ;
+          echo "<script type='text/javascript'>alert('ออกเงินเดือนของรอบ ".$round." แล้วค่ะ');</script>" ;
           echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
         }else{
           $emp_sql = "SELECT EMP_ID AS E , EMP_SALARY AS S FROM EMPLOYEE WHERE EMP_STATUS = 'Y'";
           $emp_query = mysql_query($emp_sql);
           while($row = mysql_fetch_array($emp_query)){
-            //count rolecall
-            $sel_sch_sql =  "SELECT COUNT(SCH_ID) AS countsch FROM SCHEDULE WHERE EMP_ID = '".$row['E']."' AND SCH_DATE BETWEEN ($date1,$date2)";
-            $sel_sch_query = mysql_query($sel_sch_sql);
-            $sel_sch = mysql_fetch_array($sel_sch_query);
 
             //count takedayoff
-            $sel_tak_sql = "SELECT SUM(DATEDIFF(day,TAK_DATEBEGIN,TAK_DATEEND)) AS counttak FROM TAKEDATOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN BETWEEN ($date1,$date2) AND TAK_DATEEND BETWEEN ($date1,$date2)";
-            $sel_tak_query = mysql_query($sel_tak_sql);
+            $sel_tak_sql = "SELECT SUM(TAK_AMOUNT) AS counttak FROM TAKEDAYOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN >= \"$date1\" AND TAK_DATEBEGIN <= \"$date2\"  ";
+            $sel_tak_query = mysql_query($sel_tak_sql) or die(mysql_error());
             $sel_tak = mysql_fetch_array($sel_tak_query);
-            $daytak = 0;
-            if($sel_tal['counttak']+1 > 2){
-              $daytak = 2;
-            }else{
-              $daytak = $sel_tal['counttak']+1;
-            }
 
-            //day of month
-            $sel_month_sql = "SELECT DATEDIFF(day,$date1,$date2) AS thismonth";
-            $sel_month_query = mysql_query($sel_month_sql);
-            $sel_month = mysql_fetch_array($sel_month_query);
+            $daytak = (int)$sel_tak["counttak"];
+
+            //money per day
+            $money =(int)$row['S'] / 30;
 
             //sal_fine
-            $fine = 0;
-            $diffday = $sel_month['thismonth']-($sel_sch['countsch']+$daytak+4);
-            if($diffday>0){
-              $fine = $diffday*300;
-            }
+            $fine = (int)$daytak*$money;
 
             //sal_netsalary
-            $netsalary = $row['S']-$fine;
+            $netsalary = (int)$row['S']-$fine;
+            $netsalary = (int)$netsalary;
 
             //SAL_ID
             $sql = "SELECT MAX(SAL_ID) FROM SALARY";
@@ -746,8 +739,42 @@
           echo "<script type='text/javascript'>alert('ออกเงินเดือนให้พนักงานทุกท่านแล้วค่ะ');</script>" ;
           echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
 
-
         }
+      }
+
+      //INSERT Clearing
+      if(isset($_POST['action'])&&$_POST['action']=='addclearing'){
+        $sql = "SELECT MAX(CLE_ID) FROM CLEAR";
+        $sql_query = mysql_query($sql);
+        $cle_id = (int)mysql_result($sql_query,0,0);
+        $cle_id += 1;
+        $cle_id = str_pad($cle_id, 10, "0", STR_PAD_LEFT);
+        $pro_id = $_POST['pro_id'];
+        $amount = $_POST['amount'];
+        $descript = $_POST['descript'];
+        $value = $_POST['make'];
+
+        $ins_sql = "INSERT INTO CLEAR VALUES (\"$cle_id\",\"$pro_id\",\"$amount\",\"$descript\",CURDATE())";
+        $ins_query = mysql_query($ins_sql);
+
+        $sel_sql = "SELECT * FROM PRODUCT WHERE PRO_ID = \"$pro_id\"";
+        $sel_query = mysql_query($sel_sql);
+        $pro = mysql_fetch_array($sel_query);
+
+        if($value == 1){
+          $newa = $pro['PRO_AMOUNT']+$amount;
+          $neww = $pro['PRO_WAMOUNT']-$amount;
+          $sql = "UPDATE PRODUCT SET PRO_AMOUNT = $newa , PRO_WAMOUNT = $neww WHERE PRO_ID = \"$pro_id\"";
+          $query = mysql_query($sql);
+        }else{
+          $neww = $pro['PRO_WAMOUNT']-$amount;
+          $sql = "UPDATE PRODUCT SET  PRO_WAMOUNT = $neww WHERE PRO_ID = \"$pro_id\"";
+          $query = mysql_query($sql);
+        }
+
+        echo "<script type='text/javascript'>alert('จัดการอะไหล่ชำรุด".$pro_id." เรียบร้อยตามรายการ ".$cle_id." แล้วค่ะ');</script>" ;
+        echo "<meta http-equiv ='refresh'content='0;URL=main_clear.php'>";
+
 
       }
 

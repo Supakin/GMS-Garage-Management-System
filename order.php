@@ -42,7 +42,7 @@
 <body>
   <div class="container">
     <div class="row justify-content-center align-content-center">
-      <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('main_order.php')">
+      <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.assign('main_order.php')">
         <i class='fas fa-scroll' style='font-size:10px;color:white'></i>
         กลับหน้านำเข้าอะไหล่
       </button>

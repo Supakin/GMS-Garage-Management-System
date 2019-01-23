@@ -84,20 +84,20 @@ html {overflow-y: scroll;}
       <h1>บริการซ่อม</h1>
     </div>
     <div class="col-2">
-      <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('service.php')">
+      <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.assign('service.php')">
         จัดการบริการ
       </button>
     </div>
   </div>
   <div class="row mt-3 mb-3 justify-content-center" >
     <div class="col-1.5">
-      <button type="button" class="btn btn-success  m-1" onClick = "window.location.replace('repairslip.newcus.php')">
+      <button type="button" class="btn btn-success  m-1" onClick = "window.location.assign('repairslip.newcus.php')">
         <i class='fas fa-plus' style='font-size:10px;color:white'></i>
         สำหรับลูกค้าใหม่
       </button>
     </div>
     <div class="col-1.5">
-      <button type="button" class="btn btn-success  m-1" onClick = "window.location.replace('repairslip.getcustomer.php')">
+      <button type="button" class="btn btn-success  m-1" onClick = "window.location.assign('repairslip.getcustomer.php')">
         <i class='fas fa-plus' style='font-size:10px;color:white'></i>
         สำหรับลูกค้าที่เคยใช้บริการ
       </button>

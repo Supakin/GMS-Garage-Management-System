@@ -31,6 +31,41 @@
 
 <!--font-Thai-->
 <link href="https://fonts.googleapis.com/css?family=Athiti" rel="stylesheet">
+
+<style media="screen">
+html {overflow-y: scroll;}
+
+.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tabs li {
+    display: inline-block;
+    padding: 15px 25px;
+    background: none;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.tabs li.current {
+    background: #e9e9e9;
+}
+
+.tab-contents {
+    background: #e9e9e9;
+    padding: 20px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.current {
+    display: block;
+}
+</style>
 </head>
 
 <body>
@@ -56,7 +91,7 @@
       <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addtakedayoff">
         <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
         ลางาน</button>
-      <button type="button" class="btn btn-success shadow-sm" onclick='location.replace("main_employee_rolecall.php")'>
+      <button type="button" class="btn btn-success shadow-sm" onclick='window.location.assign("main_employee_rolecall.php")'>
         <i class='fas fa-calendar-check' style='font-size:10px;color:white'></i>
         เช็คชื่อ</button>
       <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#editemployee">
@@ -68,61 +103,154 @@
       </button>
     </div>
   </div>
-  <div class="row">
-  <table class="table table-hover table-bordered table-sm">
-    <thead class="thead-dark">
-      <tr align="center">
-        <th width="8%">รหัสพนักงาน</th>
-        <th>ชื่อ</th>
-        <th>นามสกุล</th>
-        <th width="5%">เพศ</th>
-        <th width="10%">เบอร์โทรติดต่อ</th>
-        <th>ที่อยู่</th>
-        <th width="10%">วันเริ่มงาน</th>
-        <th>เงินเดือน</th>
-        <th width="5%">สถานะ</th>
-      </tr>
-    </thead>
-    <?php
-    $sql = "SELECT * FROM EMPLOYEE ORDER BY EMP_ID";
-    $resultsql = mysql_query($sql) or die (mysql_error());
+  <div class="tab-example">
+    <ul class="tabs" >
+      <li class="tab-link current active" data-tab="menu1">พนักงาน</li>
+      <li class="tab-link" data-tab="menu2">ประวัติการลา</li>
+      <li class="tab-link" data-tab="menu3">ประวัติการออกเงินเดือน</li>
+    </ul>
 
-    while($row = mysql_fetch_array($resultsql)) {
-    ?>
-      <tr>
-        <td align="center"> <?php  echo $row["EMP_ID"] ?> </td>
-        <td > <?php  echo $row["EMP_FNAME"] ?> </td>
-        <td > <?php  echo $row["EMP_LNAME"] ?> </td>
-        <td align="center">
-          <?php
-            if($row['EMP_GENDER']=='M'){
-              echo "ชาย";
-            }else{
-              echo "หญิง";
-            }
-          ?>
-        </td>
-        <td align="center"> <?php  echo $row["EMP_TEL"] ?> </td>
-        <td align="center"> <?php  echo $row["EMP_ADDRESS"] ?> </td>
-        <td align="center"> <?php  echo $row["EMP_DATE_BEGINWORK"] ?> </td>
-        <td align="center"> <?php  echo $row["EMP_SALARY"] ?> </td>
-        <td align="center">
-          <?php
-            if ($row["EMP_STATUS"]=='Y'){
-              echo "<span class='badge badge-success'>";
-              echo "ทำงาน";
-              echo "</span>";
-            }else if ($row["EMP_STATUS"]=='N'){
-              echo "<span class='badge badge-danger'>";
-              echo "ออกแล้ว";
-              echo "</span>";
-          } ?>
-        </td>
-      </tr>
-    <?php
-    }
-    ?>
-  </table>
+    <div class="tab-contents">
+      <div id="menu1" class="tab-pane current"><br>
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered table-sm">
+              <thead class="thead-dark">
+                <tr align="center">
+                  <th width="8%">รหัสพนักงาน</th>
+                  <th>ชื่อ</th>
+                  <th>นามสกุล</th>
+                  <th width="5%">เพศ</th>
+                  <th width="10%">เบอร์โทรติดต่อ</th>
+                  <th>ที่อยู่</th>
+                  <th width="10%">วันเริ่มงาน</th>
+                  <th>เงินเดือน</th>
+                  <th width="5%">สถานะ</th>
+                </tr>
+              </thead>
+              <?php
+              $sql = "SELECT * FROM EMPLOYEE ORDER BY EMP_ID";
+              $resultsql = mysql_query($sql) or die (mysql_error());
+
+              while($row = mysql_fetch_array($resultsql)) {
+              ?>
+                <tr>
+                  <td align="center"> <?php  echo $row["EMP_ID"] ?> </td>
+                  <td > <?php  echo $row["EMP_FNAME"] ?> </td>
+                  <td > <?php  echo $row["EMP_LNAME"] ?> </td>
+                  <td align="center">
+                    <?php
+                      if($row['EMP_GENDER']=='M'){
+                        echo "ชาย";
+                      }else{
+                        echo "หญิง";
+                      }
+                    ?>
+                  </td>
+                  <td align="center"> <?php  echo $row["EMP_TEL"] ?> </td>
+                  <td align="center"> <?php  echo $row["EMP_ADDRESS"] ?> </td>
+                  <td align="center"> <?php  echo $row["EMP_DATE_BEGINWORK"] ?> </td>
+                  <td align="center"> <?php  echo $row["EMP_SALARY"] ?> </td>
+                  <td align="center">
+                    <?php
+                      if ($row["EMP_STATUS"]=='Y'){
+                        echo "<span class='badge badge-success'>";
+                        echo "ทำงาน";
+                        echo "</span>";
+                      }else if ($row["EMP_STATUS"]=='N'){
+                        echo "<span class='badge badge-danger'>";
+                        echo "ออกแล้ว";
+                        echo "</span>";
+                    } ?>
+                  </td>
+                </tr>
+              <?php
+              }
+              ?>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="menu2" class="tab-pane"><br>
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered table-sm">
+              <thead class="thead-dark">
+                <tr align="center">
+                  <th>รหัสลา</th>
+                  <th>รหัสพนักงาน</th>
+                  <th>ชื่อ</th>
+                  <th>นามสกุล</th>
+                  <th>วันเริ่มต้น</th>
+                  <th>วันสิ้นสุด</th>
+                  <th>หมายเหตุ</th>
+                </tr>
+              </thead>
+              <?php
+              $sql = "SELECT * FROM TAKEDAYOFF NATURAL JOIN EMPLOYEE";
+              $sql_query = mysql_query($sql);
+              while($row = mysql_fetch_array($sql_query)) {
+              ?>
+                <tr>
+                  <td align="center"> <?php  echo $row["TAK_ID"] ?> </td>
+                  <td align="center"> <?php  echo $row["EMP_ID"] ?> </td>
+                  <td > <?php  echo $row["EMP_FNAME"] ?> </td>
+                  <td > <?php  echo $row["EMP_LNAME"] ?> </td>
+                  <td > <?php  echo $row["TAK_DATEBEGIN"] ?> </td>
+                  <td > <?php  echo $row["TAK_DATEEND"] ?> </td>
+                  <td > <?php  echo $row["TAK_DESCRIPT"] ?> </td>
+                </tr>
+              <?php
+              }
+              ?>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="menu3" class="tab-pane">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered table-sm">
+              <thead class="thead-dark">
+                <tr align="center">
+                  <th>รหัสเงินเดือน</th>
+                  <th>รหัสพนักงาน</th>
+                  <th>ชื่อ</th>
+                  <th>นามสกุล</th>
+                  <th>เงินเดือน</th>
+                  <th>หักเงิน</th>
+                  <th>เงินสุทธิ</th>
+                  <th>วันที่จ่าย</th>
+                  <th>รอบการจ่าย</th>
+                </tr>
+              </thead>
+              <?php
+              $sql = "SELECT * FROM SALARY NATURAL JOIN EMPLOYEE";
+              $sql_query = mysql_query($sql);
+              while($row = mysql_fetch_array($sql_query)) {
+              ?>
+                <tr>
+                  <td align="center"> <?php  echo $row["SAL_ID"] ?> </td>
+                  <td align="center"> <?php  echo $row["EMP_ID"] ?> </td>
+                  <td > <?php  echo $row["EMP_FNAME"] ?> </td>
+                  <td > <?php  echo $row["EMP_LNAME"] ?> </td>
+                  <td > <?php  echo $row["SAL_SALARY"] ?> </td>
+                  <td > <?php  echo $row["SAL_FINE"] ?> </td>
+                  <td > <?php  echo $row["SAL_NETSALARY"] ?> </td>
+                  <td > <?php  echo $row["SAL_PAYDATE"] ?> </td>
+                  <td > <?php  echo $row["SAL_PAYROUNDDATE"] ?> </td>
+                </tr>
+              <?php
+              }
+              ?>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </div>
@@ -157,15 +285,15 @@
           </div>
           <div class="form-group">
             <label for="emp_fname">ชื่อ :</label>
-            <input name="emp_fname" type="text" class="form-control" id="emp_fname" required  autocomplete="off">
+            <input name="emp_fname" type="text" class="form-control form-control-sm" id="emp_fname" required  autocomplete="off">
           </div>
           <div class="form-group">
             <label for="emp_lname">นามสกุล :</label>
-            <input name="emp_lname" type="text" class="form-control" id="emp_lname" required  autocomplete="off">
+            <input name="emp_lname" type="text" class="form-control form-control-sm" id="emp_lname" required  autocomplete="off">
           </div>
           <div class="form-group">
               <label for="emp_gender">เพศ :</label>
-              <select class="form-control"  id="emp_gender" name="emp_gender" required >
+              <select class="form-control form-control-sm"  id="emp_gender" name="emp_gender" required >
                   <option value="">กรุณาเลือกเพศ</option>
                   <option value="M">ชาย</option>
                   <option value="F">หญิง</option>
@@ -173,21 +301,21 @@
           </div>
           <div class="form-group">
             <label for="emp_tel">เบอร์โทรติดต่อ :</label>
-            <input name="emp_tel" type="text" class="form-control" id="emp_tel" required  autocomplete="off">
+            <input name="emp_tel" type="text" class="form-control form-control-sm"  id="emp_tel" required  autocomplete="off">
           </div>
           <div clas="form-group">
             <label for="emp_address">ที่อยู่ :</label>
-            <textarea name="emp_address" class="form-control" rows="2" id="emp_address" required></textarea>
+            <input name="emp_address" type="text" class="form-control form-control-sm"  id="emp_address" required  autocomplete="off">
           </div>
           <div class="form-group">
             <label for="emp_date_beginwork">วันเริ่มงาน :</label>
             <div>
-              <input class="form-control" type="date" name="emp_date_beginwork" id="emp_date_beginwork" required>
+              <input class="form-control form-control-sm" type="date" name="emp_date_beginwork" id="emp_date_beginwork" required>
             </div>
           </div>
           <div class="form-group">
             <label for="emp_salary">เงินเดือน :</label>
-            <input name="emp_salary" type="number" min="5000" max="999999" class="form-control" id="emp_salary" required  autocomplete="off">
+            <input name="emp_salary" type="number" min="5000" max="999999" class="form-control form-control-sm" id="emp_salary" required  autocomplete="off">
           </div>
         </div>
 
@@ -261,7 +389,7 @@
           <div class="form-group">
             <label for="emp_id">รหัสพนักงาน :</label>
             <select class="form-control"  id="emp_id" name="emp_id" required>
-              <option value="">กรุณาเลือกพนักงานที่ต้องการแก้ไขข้อมูล</option>
+              <option value="">กรุณาเลือกพนักงาน</option>
               <?php
                 $sql = "SELECT EMP_ID,EMP_FNAME,EMP_LNAME FROM EMPLOYEE WHERE EMP_STATUS='Y' ORDER BY EMP_ID";
                 $sql_query = mysql_query($sql) or die(mysql_error());
@@ -364,6 +492,23 @@
   </div>
 
 </form>
+
+
+<script>
+$(function() {
+    $('.tabs li').on('click', function() {
+        var tabId = $(this).attr('data-tab');
+
+        $('.tabs li').removeClass('current');
+        $('.tab-pane').removeClass('current');
+
+        $(this).addClass('current');
+        $('#' + tabId).addClass('current');
+    });
+});
+
+
+</script>
 
 
 </body>

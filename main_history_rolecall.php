@@ -33,7 +33,7 @@
       <h3>ประวัติการลงเวลาเข้า-ออก</h3>
     </div>
     <div class="col-1">
-      <button type="button" class="btn default" onclick='location.replace("main_employee_rolecall.php")'>ปิด</button>
+      <button type="button" class="btn default" onclick='window.history.go(-1);'>ปิด</button>
     </div>
   </div>
   <div class="row justify-content-center"><br></div>

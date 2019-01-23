@@ -50,7 +50,7 @@
       <h1>คลังอะไหล่</h1>
     </div>
     <div class="col-3.5 justify-content-end">
-      <button type="button" class="btn btn-success  shadow-sm" onClick = "window.location.replace('main_order.php')">
+      <button type="button" class="btn btn-success  shadow-sm" onClick = "window.location.assign('main_order.php')">
         <i class='fas fa-scroll' style='font-size:10px;color:white'></i>
         การจัดการอะไหล่
       </button>

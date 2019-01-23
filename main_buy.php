@@ -57,7 +57,7 @@
         <i class='fas fa-ambulance' style='font-size:10px;color:white'></i>
         เคลมอะไหล่
       </button>
-      <button type="button" class="btn btn-success " onClick = "window.location.replace('buy.history.php')">
+      <button type="button" class="btn btn-success " onClick = "window.location.assign('buy.history.php')">
         <i class='fas fa-money-bill' style='font-size:10px;color:white'></i>
         ประวัติการขาย
       </button>
