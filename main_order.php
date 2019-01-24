@@ -1302,7 +1302,7 @@ html {overflow-y: scroll;}
             <select class="form-control" name="ord_id" required>
               <option value="">กรุณากรอกรหัสนำเข้า</option>
               <?php
-                $sql = "SELECT ORD_ID FROM GET_PRODUCT_ORDER WHERE GPO_STATUS = 'Y' ";
+                $sql = "SELECT ORD_ID FROM GET_PRODUCT_ORDER WHERE GPO_STATUS = 'Y' ORDER BY ORD_ID";
                 $sql_query = mysql_query($sql) or die(mysql_error());
                 while($row = mysql_fetch_array($sql_query)){
               ?>

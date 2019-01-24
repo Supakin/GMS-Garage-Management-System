@@ -76,8 +76,7 @@ html {overflow-y: scroll;}
 <div class="container">
   <div class="row justify-content-center align-content-center">
     <button type="button" class="btn btn-info btn-block mt-2 shadow-sm" onClick = "window.location.replace('main_customer.php')">
-      <i class='fas fa-home' style='font-size:10px;color:white'></i>
-      กลับหน้าหลัก
+      กลับก่อนหน้า
     </button>
   </div>
   <div class="row mt-3 mb-5 align-items-center">

@@ -62,7 +62,7 @@
               </div>
               <div class="col">
                 <?php
-                  $repairing = "SELECT COUNT(REP_REPAIRSTATUS) AS CR FROM REPAIRSLIP";
+                  $repairing = "SELECT COUNT(REP_REPAIRSTATUS) AS CR FROM REPAIRSLIP WHERE REP_REPAIRSTATUS = 'N'";
                   $query = mysql_query($repairing) or die(mysql_error());
                   $repair = mysql_fetch_array($query);
                 ?>
@@ -146,7 +146,7 @@
     <div class="col">
       <div class="container-fuild">
         <div class="row justify-content-center align-items-center p-2 mt-5">
-          <h1 class="text-white" style="font-size: 50px"><b>GMS : GARAGE MANAGEMENT SYSTEM</b></h1>
+          <h1 class="text-white" style="font-size: 50px"><b>ระบบบริหารจัดการอู่ซ่อมรถขนาดเล็ก</b></h1>
         </div>
 
         <div class="row justify-content-center mt-5 mb-5">
@@ -232,7 +232,7 @@
                   <i class="fas fa-eraser" style='font-size:80px;color:white'></i>
                 </div>
                 <div class="col">
-                  <h2>กำจัดของเสีย</h2>
+                  <h2>เคลียร์อะไหล่</h2>
                 </div>
               </div>
             </button>

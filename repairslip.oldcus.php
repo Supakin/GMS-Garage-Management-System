@@ -123,7 +123,10 @@
       </div>
       <div class="row m-1">
         <label for="getdate">วันรับรถ</label>
-        <input type="date" name="getdate" class="form-control form-control-sm">
+      </div>
+      <div class="row m-1">
+        <b>ยังไม่มารับรถ</b>
+        <input type="hidden" name="getdate" value="">
       </div>
     </div>
   </div>

@@ -85,22 +85,24 @@ html {overflow-y: scroll;}
     </div>
 
     <div class="col-7 justify-content-end">
-      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addsalary">
-        <i class='fab fa-bitcoin' style='font-size:10px;color:white'></i>
-        ออกเงินเดือน</button>
-      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addtakedayoff">
-        <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
-        ลางาน</button>
-      <button type="button" class="btn btn-success shadow-sm" onclick='window.location.assign("main_employee_rolecall.php")'>
-        <i class='fas fa-calendar-check' style='font-size:10px;color:white'></i>
-        เช็คชื่อ</button>
-      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#editemployee">
-        <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
-        แก้ไขพนักงาน</button>
       <button type="button" class="btn btn-success  shadow-sm" data-toggle="modal" data-target="#addemployee">
         <i class='fas fa-user-plus' style='font-size:10px;color:white'></i>
         เพิ่มพนักงาน
       </button>
+      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#editemployee">
+        <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
+        แก้ไขพนักงาน</button>
+      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addtakedayoff">
+        <i class='fas fa-user-edit' style='font-size:10px;color:white'></i>
+        ลางาน</button>
+      <button type="button" class="btn btn-success shadow-sm" data-toggle="modal" data-target="#addsalary">
+        <i class='fab fa-bitcoin' style='font-size:10px;color:white'></i>
+        ออกเงินเดือน</button>
+
+      <button type="button" class="btn btn-success shadow-sm" onclick='window.location.assign("main_employee_rolecall.php")'>
+        <i class='fas fa-calendar-check' style='font-size:10px;color:white'></i>
+        เช็คชื่อ</button>
+
     </div>
   </div>
   <div class="tab-example">
@@ -492,6 +494,7 @@ html {overflow-y: scroll;}
   </div>
 
 </form>
+
 
 
 <script>

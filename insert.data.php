@@ -703,37 +703,82 @@
           echo "<script type='text/javascript'>alert('ออกเงินเดือนของรอบ ".$round." แล้วค่ะ');</script>" ;
           echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
         }else{
-          $emp_sql = "SELECT EMP_ID AS E , EMP_SALARY AS S FROM EMPLOYEE WHERE EMP_STATUS = 'Y'";
+          $emp_sql = "SELECT EMP_ID AS E , EMP_SALARY AS S,EMP_DATE_BEGINWORK FROM EMPLOYEE WHERE EMP_STATUS = 'Y'";
           $emp_query = mysql_query($emp_sql);
           while($row = mysql_fetch_array($emp_query)){
+            $check = "SELECT COUNT(SAL_ID) AS count FROM SALARY WHERE EMP_ID = '".$row['E']."'";
+            $check_query = mysql_query($check) or die(mysql_error());
+            $check1 = mysql_fetch_array($check_query);
 
-            //count takedayoff
-            $sel_tak_sql = "SELECT SUM(TAK_AMOUNT) AS counttak FROM TAKEDAYOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN >= \"$date1\" AND TAK_DATEBEGIN <= \"$date2\"  ";
-            $sel_tak_query = mysql_query($sel_tak_sql) or die(mysql_error());
-            $sel_tak = mysql_fetch_array($sel_tak_query);
+            if($check1['count']==0){
+              //count takedayoff
+              $sel_tak_sql = "SELECT SUM(TAK_AMOUNT) AS counttak FROM TAKEDAYOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN >= '".$row['EMP_DATE_BEGINWORK']."' AND TAK_DATEBEGIN <= \"$date2\"  ";
+              $sel_tak_query = mysql_query($sel_tak_sql) or die(mysql_error());
+              $sel_tak = mysql_fetch_array($sel_tak_query);
 
-            $daytak = (int)$sel_tak["counttak"];
+              $daytak = (int)$sel_tak["counttak"];
 
-            //money per day
-            $money =(int)$row['S'] / 30;
+              //money per day
+              $money =(int)$row['S'] / 30;
 
-            //sal_fine
-            $fine = (int)$daytak*$money;
+              $sql = "SELECT DATEDIFF('".$row['EMP_DATE_BEGINWORK']."',\"$date2\") AS diff";
+              $query = mysql_query($sql) or die(mysql_error());
+              $diff = mysql_fetch_array($query);
 
-            //sal_netsalary
-            $netsalary = (int)$row['S']-$fine;
-            $netsalary = (int)$netsalary;
+              //salary
+              $salary = (int)($diff['diff']+1)*$money;
 
-            //SAL_ID
-            $sql = "SELECT MAX(SAL_ID) FROM SALARY";
-            $sql_query = mysql_query($sql);
-            $sal_id = (int)mysql_result($sql_query,0,0);
-            $sal_id += 1;
-            $sal_id = str_pad($sal_id, 10, "0", STR_PAD_LEFT);
+              //sal_fine
+              $fine = (int)$daytak*$money;
 
-            //INSERT data to Salary
-            $ins_sal_sql = "INSERT INTO SALARY VALUES (\"$sal_id\",'".$row['E']."','".$row['S']."',\"$fine\",\"$netsalary\",CURDATE(),\"$round\")";
-            $ins_sal_query = mysql_query($ins_sal_sql) or die(mysql_error());
+              //sal_netsalary
+              $netsalary = (int)$salary-$fine;
+              $netsalary = (int)$netsalary;
+
+              //SAL_ID
+              $sql = "SELECT MAX(SAL_ID) FROM SALARY";
+              $sql_query = mysql_query($sql);
+              $sal_id = (int)mysql_result($sql_query,0,0);
+              $sal_id += 1;
+              $sal_id = str_pad($sal_id, 10, "0", STR_PAD_LEFT);
+
+              //new round
+              $round = $row['EMP_DATE_BEGINWORK']." to ".$date2;
+
+              //INSERT data to Salary
+              $ins_sal_sql = "INSERT INTO SALARY VALUES (\"$sal_id\",'".$row['E']."',\"$salary\",\"$fine\",\"$netsalary\",CURDATE(),\"$round\")";
+              $ins_sal_query = mysql_query($ins_sal_sql) or die(mysql_error());
+
+
+            }else{
+              //count takedayoff
+              $sel_tak_sql = "SELECT SUM(TAK_AMOUNT) AS counttak FROM TAKEDAYOFF WHERE EMP_ID = '".$row['E']."' AND TAK_DATEBEGIN >= \"$date1\" AND TAK_DATEBEGIN <= \"$date2\"  ";
+              $sel_tak_query = mysql_query($sel_tak_sql) or die(mysql_error());
+              $sel_tak = mysql_fetch_array($sel_tak_query);
+
+              $daytak = (int)$sel_tak["counttak"];
+
+              //money per day
+              $money =(int)$row['S'] / 30;
+
+              //sal_fine
+              $fine = (int)$daytak*$money;
+
+              //sal_netsalary
+              $netsalary = (int)$row['S']-$fine;
+              $netsalary = (int)$netsalary;
+
+              //SAL_ID
+              $sql = "SELECT MAX(SAL_ID) FROM SALARY";
+              $sql_query = mysql_query($sql);
+              $sal_id = (int)mysql_result($sql_query,0,0);
+              $sal_id += 1;
+              $sal_id = str_pad($sal_id, 10, "0", STR_PAD_LEFT);
+
+              //INSERT data to Salary
+              $ins_sal_sql = "INSERT INTO SALARY VALUES (\"$sal_id\",'".$row['E']."','".$row['S']."',\"$fine\",\"$netsalary\",CURDATE(),\"$round\")";
+              $ins_sal_query = mysql_query($ins_sal_sql) or die(mysql_error());
+            }
           }
 
           echo "<script type='text/javascript'>alert('ออกเงินเดือนให้พนักงานทุกท่านแล้วค่ะ');</script>" ;
@@ -777,6 +822,9 @@
 
 
       }
+
+
+
 
 
   disconnect();

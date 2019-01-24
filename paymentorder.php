@@ -159,7 +159,7 @@
        ยอดที่ชำระ
     </div>
     <div class="col-2  justify-content-center" >
-      <input type="number" name="price" class="form-control"  min="0" max="<?php echo $set_ord['ORD_TOTALPRICE']?> required">
+      <input type="number" name="price" class="form-control"  min="<?php echo $set_ord['ORD_TOTALPRICE']?>" max="<?php echo $set_ord['ORD_TOTALPRICE']?>" required>
     </div>
     <div class="col-1">
       บาท

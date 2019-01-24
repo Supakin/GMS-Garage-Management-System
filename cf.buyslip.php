@@ -92,15 +92,15 @@
               <td align="center"><?php echo $i+1 ?></td>
               <td align="center"><?php echo $result['PRO_ID'] ?></td>
               <td><?php echo $result['PRO_NAME']?></td>
-              <td align="right"><?php echo $result['PRO_BUYPRICE'] ?></td>
+              <td align="right"><?php echo $result['PRO_SELLPRICE'] ?></td>
               <td align="center"><?php echo $amount[$i] ?></td>
-              <td align="right"><?php echo $amount[$i]*$result['PRO_BUYPRICE'] ?></td>
+              <td align="right"><?php echo $amount[$i]*$result['PRO_SELLPRICE'] ?></td>
               <input type="hidden" name="product[]" value="<?php echo $result['PRO_ID'] ?>">
               <input type="hidden" name="amount[]" value="<?php echo  $amount[$i] ?>">
-              <input type="hidden" name="price[]" value="<?php echo $amount[$i]*$result['PRO_BUYPRICE'] ?>">
+              <input type="hidden" name="price[]" value="<?php echo $amount[$i]*$result['PRO_SELLPRICE'] ?>">
             </tr>
           <?php
-              $sumprice += ($amount[$i]*$result['PRO_BUYPRICE']);
+              $sumprice += ($amount[$i]*$result['PRO_SELLPRICE']);
             }
           ?>
         </table>
