@@ -781,8 +781,8 @@
             }
           }
 
-          echo "<script type='text/javascript'>alert('ออกเงินเดือนให้พนักงานทุกท่านแล้วค่ะ');</script>" ;
-          echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
+         echo "<script type='text/javascript'>alert('ออกเงินเดือนให้พนักงานทุกท่านแล้วค่ะ');</script>" ;
+         echo "<meta http-equiv ='refresh'content='0;URL=main_employee.php'>";
 
         }
       }
